@@ -1,0 +1,9 @@
+import {
+  "yrz12345/moonrobots" @robots,
+  "moonbitlang/core/env",
+  "moonbitlang/x/fs",
+}
+
+pkgtype(kind: "executable")
+
+supported_targets = "native"

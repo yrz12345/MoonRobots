@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hustcer/setup-moonbit@v1
+      - name: Toolchain
+        run: moon version --all
+      - name: Dependencies
+        run: moon update
+      - name: Format
+        run: |
+          moon fmt
+          git diff --exit-code
+      - name: Check all backends
+        run: moon check --target all --deny-warn
+      - name: Test all backends
+        run: moon test --target all
+      - name: Build native CLI
+        run: moon build src/cmd/moonrobots --target native --release

@@ -1,0 +1,215 @@
+# MoonRobots
+
+MoonRobots 是一个使用 MoonBit 实现的、可解释的 `robots.txt` 解析与访问决策引擎。它面向搜索引擎、AI Agent、RAG 数据采集器、链接检查器和网站审计工具，聚焦 [RFC 9309](https://www.rfc-editor.org/rfc/rfc9309.html) 中最容易实现错误的解析与匹配语义。
+
+**在线演示：<https://yrz12345.github.io/MoonRobots/>**
+
+```text
+robots.txt + crawler product token + URL
+                    │
+                    ▼
+              MoonRobots engine
+                    │
+        ┌───────────┴───────────┐
+        ▼                       ▼
+   ALLOWED / DENIED       matched rule + line
+```
+
+## 特性
+
+- 容错解析 `User-agent`、`Allow`、`Disallow` 和 `Sitemap`
+- RFC 9309 User-agent 分组选择及同名分组合并
+- 最长规则优先；同长度冲突时 `Allow` 优先
+- 支持 `*` 通配符和 `$` 结尾锚点
+- UTF-8 与百分号编码规范化
+- 对 `/robots.txt` 的隐式允许
+- 返回命中规则、源码行号和决策原因，而不只是一个布尔值
+- 提供完整评估轨迹：每条候选规则的标准化结果、匹配状态与特异度
+- `check`、`inspect`、`lint`、`batch` 四个 CLI 命令
+- `--json` 结构化输出，可直接接入 CI、爬虫和 AI Agent
+- 语义 lint：重复规则、空分组、全站禁止、异常 Sitemap 等
+- 核心库在 Native、JavaScript、Wasm 和 Wasm-GC 后端测试
+- 零服务端浏览器实验台，直接运行 MoonBit 编译出的 JavaScript 引擎
+
+![MoonRobots 浏览器策略实验台](web/preview-desktop.png)
+
+## 快速开始
+
+环境要求：近期版本的 MoonBit 工具链。
+
+```powershell
+moon update
+moon check --target all --deny-warn
+moon test --target all
+```
+
+### 浏览器实验台
+
+直接双击打开 `web/index.html`，即可编辑策略、切换示例并查看判定轨迹。页面不请求远端服务，所有解析与匹配都在浏览器内由 MoonBit 编译产物完成。
+
+修改核心或浏览器 API 后，重新生成运行时：
+
+```powershell
+.\scripts\build-web.ps1
+```
+
+如果本地已安装 Playwright，可执行交互回归测试：
+
+```powershell
+node scripts\verify-web.cjs
+```
+
+判断一个 URL：
+
+```powershell
+moon run src/cmd/moonrobots --target native -- check examples/basic.txt --agent MoonBot --url https://example.com/admin/settings
+```
+
+机器可读输出：
+
+```powershell
+moon run src/cmd/moonrobots --target native -- check examples/basic.txt --agent MoonBot --url https://example.com/admin/settings --json
+```
+
+输出：
+
+```text
+DENIED
+Crawler: MoonBot
+Path: /admin/settings
+Selected group: moonbot
+Matched rule: Disallow: /admin/ (line 8)
+Specificity: 7
+Reason: the most specific matching rule was selected
+```
+
+检查文件结构：
+
+```powershell
+moon run src/cmd/moonrobots --target native -- inspect examples/basic.txt
+```
+
+显示非致命解析问题：
+
+```powershell
+moon run src/cmd/moonrobots --target native -- lint examples/malformed.txt
+```
+
+`lint` 会同时报告解析问题和语义风险，例如重复规则、空规则组、全站禁止规则、相对 Sitemap 以及跨组重复的 User-agent。
+
+批量判断 URL：
+
+```powershell
+moon run src/cmd/moonrobots --target native -- batch examples/basic.txt examples/urls.txt --agent MoonBot
+```
+
+`batch` 同样支持 `--json`，输出中保留原始 URL、决策结果和汇总计数。
+
+## 作为库使用
+
+```moonbit
+let robots = @moonrobots.parse(
+  (
+    #|User-agent: *
+    #|Disallow: /private/
+    #|Allow: /private/public/
+    #|
+  ),
+)
+
+let decision = @moonrobots.evaluate(
+  robots,
+  "ExampleBot",
+  "https://example.com/private/report",
+)
+
+if decision.allowed {
+  println("allowed")
+} else {
+  match decision.matched_rule {
+    Some(rule) => println("denied by line \{rule.line}: \{rule.pattern}")
+    None => println("denied")
+  }
+}
+```
+
+需要展示完整决策过程时，使用 `evaluate_trace`：
+
+```moonbit
+let trace = @moonrobots.evaluate_trace(robots, "ExampleBot", "/private/report")
+for candidate in trace.candidates {
+  println(
+    "line \{candidate.rule.line}: matched=\{candidate.matched}, specificity=\{candidate.match_length}",
+  )
+}
+```
+
+仅需要布尔结果时可以使用：
+
+```moonbit
+let allowed = @moonrobots.is_allowed(robots, "ExampleBot", "/docs/start")
+```
+
+`user_agent` 参数应当传入爬虫的 product token，例如 `Googlebot` 或 `MoonBot`，而不是完整 HTTP `User-Agent` 请求头。
+
+## 决策规则
+
+1. 对 product token 进行大小写不敏感的精确匹配。
+2. 合并所有匹配相同 product token 的分组。
+3. 如果没有精确匹配，则使用 `User-agent: *` 分组。
+4. 将路径、查询字符串及规则规范化为可比较形式。
+5. 收集所有命中的 `Allow` 和 `Disallow` 规则。
+6. 选择最具体的规则；长度相同时选择 `Allow`。
+7. 没有规则命中时默认允许。
+
+## 项目结构
+
+```text
+src/
+  types.mbt       public data model
+  parser.mbt      fault-tolerant robots.txt parser
+  normalize.mbt   URL extraction and percent normalization
+  matcher.mbt     linear-time wildcard matcher and decision engine
+  *_test.mbt      cross-backend tests
+src/cmd/moonrobots/ native CLI
+src/web_api/       browser-facing foreign library
+web/               interactive policy workbench
+scripts/           reproducible web build and browser verification
+examples/         runnable policies and URL lists
+docs/competition/ competition proposal and acceptance checklist
+```
+
+## 标准范围
+
+当前版本实现 RFC 9309 的文件解析、分组选择、规则匹配、特殊字符、URL 编码比较和 `/robots.txt` 隐式允许语义。`Sitemap` 作为常见扩展被收集，但不影响分组。
+
+以下内容属于后续路线，而不是 v0.1.0 的标准符合性声明：
+
+- 自动下载 `/robots.txt`
+- HTTP 重定向、状态码和缓存策略
+- `Crawl-delay` 等非标准扩展
+- Sitemap XML 下载与解析
+- 完整网页爬虫
+
+`robots.txt` 是自愿遵守的爬虫协议，不是身份认证、授权或数据安全机制。
+
+## 质量检查
+
+```powershell
+moon fmt
+moon check --target all --deny-warn
+moon test --target all
+moon info
+moon build src/cmd/moonrobots --target native --release
+```
+
+## 路线图
+
+- v0.1：解析、规则匹配、解释、CLI、浏览器实验台、跨后端测试
+- v0.2：CSV 报告、Sitemap XML 解析和站点级规则覆盖统计
+- v0.3：HTTP 获取、条件请求和域名缓存
+- v0.4：MCP Server、Agent 访问审计和抓取计划生成
+
+## 许可证
+
+[Apache-2.0](LICENSE)。项目为原创 MoonBit 实现；RFC 示例及术语归其各自规范所有。

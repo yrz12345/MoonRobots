@@ -1,0 +1,11 @@
+/_build/
+/.mooncakes/
+*.wat
+*.wasm
+*.js
+*.map
+!web/app.js
+!web/assets/moonrobots.js
+!scripts/verify-web.cjs
+/docs/design/
+/web/preview-mobile.png

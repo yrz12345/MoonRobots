@@ -1,0 +1,5 @@
+https://example.com/
+https://example.com/admin/settings
+https://example.com/admin/help.html
+https://example.com/private/report
+https://example.com/report.pdf

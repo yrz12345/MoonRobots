@@ -1,0 +1,7 @@
+Disallow: /before-agent/
+User-agent:
+User-agent: DemoBot
+Disalow: /misspelled/
+Allow /missing-colon/
+Sitemap:
+Disallow: /valid/

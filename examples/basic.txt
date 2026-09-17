@@ -1,0 +1,11 @@
+# Example policy used by the CLI quick start.
+User-agent: *
+Disallow: /private/
+Allow: /private/public/
+Disallow: /*.pdf$
+
+User-agent: MoonBot
+Disallow: /admin/
+Allow: /admin/help.html
+
+Sitemap: https://example.com/sitemap.xml

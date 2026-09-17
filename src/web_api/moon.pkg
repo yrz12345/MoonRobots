@@ -1,0 +1,11 @@
+import {
+  "yrz12345/moonrobots" @robots,
+}
+
+pkgtype(kind: "foreign_library")
+
+supported_targets = "js"
+
+options(
+  link: { "js": { "format": "iife" } },
+)

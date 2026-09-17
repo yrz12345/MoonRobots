@@ -1,0 +1,96 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "moonrobots/moonrobots"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn decision_json(Decision) -> Json
+
+pub fn diagnostic_json(Diagnostic) -> Json
+
+pub fn evaluate(RobotsFile, String, String) -> Decision
+
+pub fn evaluate_trace(RobotsFile, String, String) -> EvaluationTrace
+
+pub fn evaluation_trace_json(EvaluationTrace) -> Json
+
+pub fn is_allowed(RobotsFile, String, String) -> Bool
+
+pub fn lint(RobotsFile) -> Array[Diagnostic]
+
+pub fn parse(String) -> RobotsFile
+
+pub fn version() -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct Decision {
+  allowed : Bool
+  user_agent : String
+  path : String
+  selected_agents : Array[String]
+  matched_rule : Rule?
+  match_length : Int
+  reason : DecisionReason
+} derive(Eq, @debug.Debug)
+
+pub(all) enum DecisionReason {
+  ImplicitRobotsTxt
+  NoMatchingGroup
+  NoMatchingRule
+  MatchedRule
+} derive(Eq, @debug.Debug)
+
+pub(all) struct Diagnostic {
+  severity : Severity
+  code : String
+  line : Int
+  message : String
+} derive(Eq, @debug.Debug)
+
+pub(all) struct EvaluationTrace {
+  decision : Decision
+  candidates : Array[RuleEvaluation]
+} derive(Eq, @debug.Debug)
+
+pub(all) struct Group {
+  agents : Array[String]
+  rules : Array[Rule]
+  line : Int
+} derive(Eq, @debug.Debug)
+
+pub(all) struct RobotsFile {
+  groups : Array[Group]
+  sitemaps : Array[String]
+  diagnostics : Array[Diagnostic]
+} derive(Eq, @debug.Debug)
+
+pub(all) struct Rule {
+  kind : RuleKind
+  pattern : String
+  line : Int
+} derive(Eq, @debug.Debug)
+
+pub(all) struct RuleEvaluation {
+  rule : Rule
+  normalized_pattern : String
+  matched : Bool
+  match_length : Int
+} derive(Eq, @debug.Debug)
+
+pub(all) enum RuleKind {
+  Allow
+  Disallow
+} derive(Eq, @debug.Debug)
+
+pub(all) enum Severity {
+  Info
+  Warning
+} derive(Eq, @debug.Debug)
+
+// Type aliases
+
+// Traits
