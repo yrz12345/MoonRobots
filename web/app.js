@@ -119,6 +119,13 @@ Sitemap: relative-sitemap.xml
     $("#groups-count").textContent = result.groups;
     $("#rules-count").textContent = result.rules;
     $("#issues-count").textContent = result.diagnostics.length;
+    const health = $("#policy-health");
+    const healthLabel = $("#policy-health-label");
+    const hasIssues = result.diagnostics.length > 0;
+    health.classList.toggle("has-issues", hasIssues);
+    healthLabel.textContent = hasIssues
+      ? `发现 ${result.diagnostics.length} 个策略问题`
+      : "策略状态良好，没有发现风险";
 
     renderCandidates(result.trace.candidates, decision);
     renderDiagnostics(result.diagnostics);

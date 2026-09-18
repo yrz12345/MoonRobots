@@ -5,136 +5,135 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="MoonRobots RFC 9309 可解释策略实验台">
   <title>MoonRobots · Policy Workbench</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles-bplus.css">
 </head>
 <body>
-  <!--
-    Assumptions:
-    - Primary audience: hackathon judges and developers on a laptop.
-    - Primary flow: edit policy → set crawler/URL → inspect decision trace.
-    - No supplied logo exists; the typographic wordmark is an explicit placeholder.
-    - All visible result data comes from the compiled MoonBit engine, not mock data.
-
-    Design reasoning:
-    - Editorial instrument panel instead of a generic dark developer dashboard.
-    - One acid-lime status color, hard dividers, and dense but legible information.
-    - No decorative imagery, gradient, fabricated metric, or ornamental iconography.
-  -->
-  <div class="shell">
-    <header class="masthead">
+  <div class="app-shell">
+    <header class="topbar">
       <a class="wordmark" href="#workspace" aria-label="MoonRobots 首页">
-        <span>MOON</span><i></i><span>ROBOTS</span>
+        <span class="moon-mark" aria-hidden="true"></span>
+        <span>MOONROBOTS</span>
       </a>
-      <p class="dek">把 robots.txt 的“为什么”说清楚。</p>
-      <div class="build-state">
+      <nav class="primary-nav" aria-label="页面导航">
+        <a href="#workspace">判定</a>
+        <a href="#coverage">规则覆盖</a>
+        <a href="#diagnostics">策略诊断</a>
+        <a href="https://github.com/yrz12345/MoonRobots" target="_blank" rel="noreferrer">源码</a>
+      </nav>
+      <div class="engine-state" aria-label="MoonBit 引擎状态">
         <span class="pulse" aria-hidden="true"></span>
         <span>MOONBIT ENGINE</span>
         <strong id="engine-version">LOADING</strong>
       </div>
     </header>
 
-    <main id="workspace" class="workspace">
-      <section class="query-strip" aria-labelledby="query-heading">
-        <div class="section-number">01</div>
-        <div class="query-heading">
-          <p class="eyebrow">EVALUATION INPUT</p>
-          <h1 id="query-heading">策略实验台</h1>
+    <main class="page-main">
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <h1 id="page-title">读懂每一条爬虫规则。</h1>
+          <p>把模糊的允许或拒绝，变成清楚、可靠、可以复查的策略证据。</p>
         </div>
-        <label class="field agent-field">
-          <span>USER-AGENT</span>
-          <input id="agent" type="text" value="MoonBot" autocomplete="off" spellcheck="false">
-        </label>
-        <label class="field url-field">
-          <span>URL OR PATH</span>
-          <input id="url" type="text" value="https://example.com/moon-only/preview/report.pdf" autocomplete="off" spellcheck="false">
-        </label>
-        <button id="evaluate" class="evaluate-button" type="button">
-          <span>运行判定</span><kbd>Ctrl ↵</kbd>
-        </button>
-      </section>
-
-      <section class="editor-panel" aria-labelledby="editor-heading">
-        <header class="panel-header">
-          <div>
-            <p class="eyebrow">SOURCE POLICY</p>
-            <h2 id="editor-heading">robots.txt</h2>
-          </div>
-          <div class="examples" aria-label="示例策略">
-            <button type="button" data-example="balanced" class="active">基础</button>
-            <button type="button" data-example="wildcards">通配符</button>
-            <button type="button" data-example="risk">风险策略</button>
-          </div>
-        </header>
-        <div class="editor-wrap">
-          <div id="line-numbers" class="line-numbers" aria-hidden="true"></div>
-          <textarea id="source" aria-label="robots.txt 内容" spellcheck="false"></textarea>
-        </div>
-        <footer class="editor-footer">
-          <span id="source-lines">0 LINES</span>
-          <span>UTF-8</span>
-          <span>RFC 9309</span>
-        </footer>
-      </section>
-
-      <section class="decision-panel" aria-labelledby="decision-heading">
-        <header class="panel-header result-header">
-          <div>
-            <p class="eyebrow">DECISION TRACE</p>
-            <h2 id="decision-heading">判定结果</h2>
-          </div>
-          <span id="decision-stamp" class="decision-stamp pending">WAIT</span>
-        </header>
-
-        <div id="decision-hero" class="decision-hero pending">
-          <p id="decision-kicker">ENGINE READY</p>
-          <strong id="decision-word">等待输入</strong>
-          <p id="decision-explanation">编辑左侧策略，判定轨迹会在这里展开。</p>
-        </div>
-
-        <dl class="trace-facts">
-          <div><dt>标准化路径</dt><dd id="normalized-path">—</dd></div>
-          <div><dt>选中代理组</dt><dd id="selected-agents">—</dd></div>
-          <div><dt>最终命中规则</dt><dd id="matched-rule">—</dd></div>
-          <div><dt>匹配特异度</dt><dd id="match-length">0</dd></div>
-        </dl>
-
-        <div class="metrics" aria-label="策略摘要">
-          <div><span>GROUPS</span><strong id="groups-count">0</strong></div>
-          <div><span>RULES</span><strong id="rules-count">0</strong></div>
-          <div><span>ISSUES</span><strong id="issues-count">0</strong></div>
+        <div id="policy-health" class="policy-health" role="status" aria-live="polite">
+          <span class="health-dot" aria-hidden="true"></span>
+          <span id="policy-health-label">正在检查策略状态…</span>
         </div>
       </section>
 
-      <section class="coverage-panel" aria-labelledby="coverage-heading">
-        <header class="panel-header coverage-header">
-          <div>
-            <p class="eyebrow">RULE COVERAGE</p>
-            <h2 id="coverage-heading">候选规则分析</h2>
-          </div>
-          <p>特异度越高，优先级越高；同长度时 Allow 胜出。</p>
-        </header>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr><th>状态</th><th>行</th><th>规则</th><th>标准化</th><th>特异度</th></tr>
-            </thead>
-            <tbody id="candidate-body"></tbody>
-          </table>
-          <div id="candidate-empty" class="empty-state">运行判定后显示参与决策的规则。</div>
+      <section id="workspace" class="workbench" aria-label="robots.txt 策略实验台">
+        <div class="query-strip">
+          <label class="field">
+            <span>USER-AGENT</span>
+            <input id="agent" type="text" value="MoonBot" autocomplete="off" spellcheck="false">
+          </label>
+          <label class="field">
+            <span>URL OR PATH</span>
+            <input id="url" type="text" value="https://example.com/moon-only/preview/report.pdf" autocomplete="off" spellcheck="false">
+          </label>
+          <button id="evaluate" class="evaluate-button" type="button">
+            <span>运行判定</span><kbd>Ctrl ↵</kbd>
+          </button>
+        </div>
+
+        <div class="workspace-grid">
+          <section class="editor-panel" aria-labelledby="editor-heading">
+            <header class="panel-header">
+              <h2 id="editor-heading">robots.txt</h2>
+              <div class="examples" aria-label="示例策略">
+                <button type="button" data-example="balanced" class="active">基础</button>
+                <button type="button" data-example="wildcards">通配符</button>
+                <button type="button" data-example="risk">风险策略</button>
+              </div>
+            </header>
+            <div class="editor-wrap">
+              <div id="line-numbers" class="line-numbers" aria-hidden="true"></div>
+              <textarea id="source" aria-label="robots.txt 内容" spellcheck="false"></textarea>
+            </div>
+            <footer class="editor-footer">
+              <span id="source-lines">0 LINES</span>
+              <span>RFC 9309 · 实时解析</span>
+            </footer>
+          </section>
+
+          <section class="decision-panel" aria-labelledby="decision-heading">
+            <header class="panel-header result-header">
+              <h2 id="decision-heading">判定结果</h2>
+              <span id="decision-stamp" class="decision-stamp pending">WAIT</span>
+            </header>
+
+            <div id="decision-hero" class="decision-hero pending">
+              <p id="decision-kicker">ENGINE READY</p>
+              <strong id="decision-word" aria-live="polite">等待输入</strong>
+              <p id="decision-explanation">编辑策略后，完整的判定依据会在这里展开。</p>
+            </div>
+
+            <dl class="trace-facts">
+              <div><dt>标准化路径</dt><dd id="normalized-path">—</dd></div>
+              <div><dt>选中代理组</dt><dd id="selected-agents">—</dd></div>
+              <div><dt>最终命中规则</dt><dd id="matched-rule">—</dd></div>
+              <div><dt>匹配特异度</dt><dd id="match-length">0</dd></div>
+            </dl>
+
+            <div class="metrics" aria-label="策略摘要">
+              <div><span>GROUPS</span><strong id="groups-count">0</strong></div>
+              <div><span>RULES</span><strong id="rules-count">0</strong></div>
+              <div><span>ISSUES</span><strong id="issues-count">0</strong></div>
+            </div>
+          </section>
+        </div>
+
+        <div class="support-grid">
+          <section id="coverage" class="coverage-panel" aria-labelledby="coverage-heading">
+            <header class="panel-header coverage-header">
+              <div>
+                <p class="eyebrow">RULE COVERAGE</p>
+                <h2 id="coverage-heading">候选规则分析</h2>
+              </div>
+              <p>特异度越高，优先级越高；同长度时 Allow 胜出。</p>
+            </header>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>状态</th><th>行</th><th>规则</th><th>标准化</th><th>特异度</th></tr>
+                </thead>
+                <tbody id="candidate-body"></tbody>
+              </table>
+              <div id="candidate-empty" class="empty-state">运行判定后显示参与决策的规则。</div>
+            </div>
+          </section>
+
+          <aside id="diagnostics" class="diagnostics-panel" aria-labelledby="diagnostics-heading">
+            <header class="panel-header diagnostics-header">
+              <div>
+                <p class="eyebrow">POLICY HEALTH</p>
+                <h2 id="diagnostics-heading">策略诊断</h2>
+              </div>
+              <button id="copy-json" type="button">复制 JSON</button>
+            </header>
+            <ol id="diagnostics-list" class="diagnostics-list"></ol>
+            <p id="diagnostics-empty" class="empty-state">没有发现语法或语义风险。</p>
+          </aside>
         </div>
       </section>
-
-      <aside class="diagnostics-panel" aria-labelledby="diagnostics-heading">
-        <header class="panel-header diagnostics-header">
-          <div>
-            <p class="eyebrow">POLICY HEALTH</p>
-            <h2 id="diagnostics-heading">诊断</h2>
-          </div>
-          <button id="copy-json" type="button">复制 JSON</button>
-        </header>
-        <ol id="diagnostics-list" class="diagnostics-list"></ol>
-        <p id="diagnostics-empty" class="empty-state">没有发现语法或语义风险。</p>
-      </aside>
     </main>
 
     <footer class="site-footer">
