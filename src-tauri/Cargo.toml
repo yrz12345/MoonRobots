@@ -1,0 +1,19 @@
+[package]
+name = "moonrobots-desktop"
+version = "0.1.0"
+description = "Explainable robots.txt policy workbench"
+authors = ["yrz12345"]
+edition = "2024"
+rust-version = "1.85"
+license = "Apache-2.0"
+repository = "https://github.com/yrz12345/MoonRobots"
+
+[lib]
+name = "moonrobots_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.6.3", features = [] }
+
+[dependencies]
+tauri = { version = "2.11.5", features = [] }

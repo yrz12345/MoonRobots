@@ -1,14 +1,14 @@
 # MoonRobots
 
 [![CI](https://github.com/yrz12345/MoonRobots/actions/workflows/ci.yml/badge.svg)](https://github.com/yrz12345/MoonRobots/actions/workflows/ci.yml)
-[![Web Demo](https://img.shields.io/badge/Web-Demo-111111)](https://yrz12345.github.io/MoonRobots/)
+[![Desktop](https://img.shields.io/badge/Windows-Desktop-111111)](https://github.com/yrz12345/MoonRobots/releases)
 [![License](https://img.shields.io/badge/License-Apache--2.0-555555.svg)](LICENSE)
 
 MoonRobots 是一个使用 MoonBit 实现的可解释 `robots.txt` 解析与访问决策引擎。项目遵循 [RFC 9309](https://www.rfc-editor.org/rfc/rfc9309.html) 的核心语义，为搜索引擎、AI Agent、RAG 数据采集器、链接检查器及站点审计系统提供一致、可复查的爬虫策略判定。
 
-项目同时提供核心库、原生命令行工具和零服务端浏览器工作台。每次判定不仅返回允许或拒绝结果，还会说明选中的 User-agent 分组、最终命中的规则、源文件行号、匹配特异度和候选规则轨迹。
+项目同时提供 Windows 桌面工作台、核心库和原生命令行工具。每次判定不仅返回允许或拒绝结果，还会说明选中的 User-agent 分组、最终命中的规则、源文件行号、匹配特异度和候选规则轨迹。
 
-**在线工作台：<https://yrz12345.github.io/MoonRobots/>**
+**桌面版下载：<https://github.com/yrz12345/MoonRobots/releases>**
 
 ```text
 robots.txt + crawler product token + URL
@@ -33,28 +33,28 @@ robots.txt + crawler product token + URL
 | 变更分析 | 比较新旧策略，定位新增允许和新增拒绝的 URL |
 | 动态覆盖率 | 识别活跃、被遮蔽和从未命中的规则 |
 | 工具接口 | 提供 MoonBit 核心库、六个 CLI 命令、浏览器 API 及 JSON 输出 |
-| Web 工作台 | 支持单 URL 判定、策略差异、规则覆盖、文件拖放和 JSON/Markdown 导出 |
+| 桌面工作台 | 支持单 URL 判定、策略差异、规则覆盖、文件拖放和 JSON/Markdown 导出 |
 | 质量保障 | 在 Native、JavaScript、Wasm 和 Wasm-GC 后端执行测试，并运行浏览器回归检查 |
 
-![MoonRobots 浏览器策略实验台](web/preview-desktop.png)
+![MoonRobots 桌面策略工作台](web/preview-desktop.png)
 
 ![MoonRobots 策略差异分析](web/preview-analysis.png)
 
 ## 使用方式
 
-### 在线工作台
+### Windows 桌面版
 
-访问 <https://yrz12345.github.io/MoonRobots/>，无需安装任何服务。浏览器工作台提供三种模式：
+从 [GitHub Releases](https://github.com/yrz12345/MoonRobots/releases) 下载最新版 Windows 安装程序。桌面工作台完全在本机运行，不会上传策略文件或 URL 数据，并提供三种模式：
 
 - **单 URL 判定**：解释允许或拒绝结论、命中规则与全部候选规则。
 - **策略差异**：使用同一组 URL 比较部署前后的最终访问行为。
 - **覆盖分析**：统计规则匹配与胜出次数，识别被遮蔽和从未命中的规则。
 
-策略文件和 URL 列表可通过按钮或拖放导入，分析结果可导出为 JSON 或 Markdown。页面不会上传输入内容，所有解析与匹配均在浏览器内由 MoonBit 编译产物完成。
+策略文件和 URL 列表可通过按钮或拖放导入，分析结果可导出为 JSON 或 Markdown。所有解析与匹配均由应用内嵌的 MoonBit 编译产物完成。
 
 ### 本地开发
 
-环境要求：近期版本的 MoonBit 工具链。
+核心库开发需要近期版本的 MoonBit 工具链：
 
 ```powershell
 moon update
@@ -62,7 +62,20 @@ moon check --target all --deny-warn
 moon test --target all
 ```
 
-直接打开 `web/index.html` 即可运行浏览器工作台。
+桌面端开发还需要 Node.js 22、Rust stable、Microsoft C++ Build Tools 和 Windows SDK。安装依赖并启动开发模式：
+
+```powershell
+npm ci
+npm run desktop:dev
+```
+
+构建 Windows NSIS 安装程序（构建脚本默认限制为单个 Cargo 并行任务，以降低 Windows 环境的内存占用）：
+
+```powershell
+npm run desktop:build
+```
+
+安装程序输出到 `src-tauri/target/release/bundle/nsis/`。
 
 修改核心或浏览器 API 后，重新生成运行时：
 
@@ -224,7 +237,8 @@ src/
   *_test.mbt      cross-backend tests
 src/cmd/moonrobots/ native CLI
 src/web_api/       browser-facing foreign library
-web/               interactive policy workbench
+web/               desktop workbench frontend assets
+src-tauri/         Tauri desktop shell and Windows packaging
 scripts/           reproducible web build and browser verification
 examples/         runnable policies and URL lists
 package.json       reproducible Playwright web-quality checks
@@ -258,7 +272,7 @@ npm run test:web
 
 ## 路线图
 
-- v0.1：解析、规则匹配、解释、策略回归、规则覆盖率、CLI、浏览器实验台、跨后端测试
+- v0.1：解析、规则匹配、解释、策略回归、规则覆盖率、CLI、Windows 桌面工作台、跨后端测试
 - v0.2：CSV 报告、Sitemap XML 解析和站点级历史趋势
 - v0.3：HTTP 获取、条件请求和域名缓存
 - v0.4：MCP Server、Agent 访问审计和抓取计划生成

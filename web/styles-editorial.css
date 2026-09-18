@@ -14,9 +14,9 @@
   --deny: #ff8878;
   --deny-dark: #431b18;
   --warning: #edc36c;
-  --display: "Bricolage Grotesque", "Noto Sans SC", sans-serif;
-  --body: "Noto Sans SC", "Bricolage Grotesque", sans-serif;
-  --mono: "IBM Plex Mono", "Cascadia Code", Consolas, monospace;
+  --display: Bahnschrift, "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+  --body: "Microsoft YaHei UI", "Segoe UI Variable", "Segoe UI", sans-serif;
+  --mono: "Cascadia Mono", "Cascadia Code", Consolas, monospace;
 }
 
 * { box-sizing: border-box; }

@@ -1,6 +1,8 @@
 /_build/
 /.mooncakes/
 /node_modules/
+/src-tauri/target/
+/src-tauri/gen/
 *.wat
 *.wasm
 *.js
