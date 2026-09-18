@@ -1,14 +1,11 @@
 # MoonRobots
 
 [![CI](https://github.com/yrz12345/MoonRobots/actions/workflows/ci.yml/badge.svg)](https://github.com/yrz12345/MoonRobots/actions/workflows/ci.yml)
-[![Desktop](https://img.shields.io/badge/Windows-Desktop-111111)](https://github.com/yrz12345/MoonRobots/releases)
 [![License](https://img.shields.io/badge/License-Apache--2.0-555555.svg)](LICENSE)
 
 MoonRobots 是一个使用 MoonBit 实现的可解释 `robots.txt` 解析与访问决策引擎。项目遵循 [RFC 9309](https://www.rfc-editor.org/rfc/rfc9309.html) 的核心语义，为搜索引擎、AI Agent、RAG 数据采集器、链接检查器及站点审计系统提供一致、可复查的爬虫策略判定。
 
 项目同时提供 Windows 桌面工作台、核心库和原生命令行工具。每次判定不仅返回允许或拒绝结果，还会说明选中的 User-agent 分组、最终命中的规则、源文件行号、匹配特异度和候选规则轨迹。
-
-**桌面版下载：<https://github.com/yrz12345/MoonRobots/releases>**
 
 ```text
 robots.txt + crawler product token + URL
@@ -42,9 +39,9 @@ robots.txt + crawler product token + URL
 
 ## 使用方式
 
-### Windows 桌面版
+### Windows 桌面版（从源码构建）
 
-从 [GitHub Releases](https://github.com/yrz12345/MoonRobots/releases) 下载最新版 Windows 安装程序。桌面工作台完全在本机运行，不会上传策略文件或 URL 数据，并提供三种模式：
+GitHub 仓库仅维护项目源代码，不提交或发布预编译安装包。按照下方“本地开发”步骤执行 `npm run desktop:build` 后，可在 `dist/` 中获得安装版和便携版。桌面工作台完全在本机运行，不会上传策略文件或 URL 数据，并提供三种模式：
 
 - **单 URL 判定**：解释允许或拒绝结论、命中规则与全部候选规则。
 - **策略差异**：使用同一组 URL 比较部署前后的最终访问行为。

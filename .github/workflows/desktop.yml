@@ -33,9 +33,3 @@ jobs:
         run: npm run test:web
       - name: Build Windows installer
         run: npm run desktop:build
-      - name: Upload Windows installer
-        uses: actions/upload-artifact@v4
-        with:
-          name: MoonRobots-windows-x64
-          path: dist/*.exe
-          if-no-files-found: error

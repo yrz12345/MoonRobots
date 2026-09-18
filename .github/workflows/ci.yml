@@ -44,12 +44,3 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Browser, accessibility and responsive checks
         run: npm run test:web
-      - name: Upload visual regression artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: moonrobots-web-previews
-          path: |
-            docs/screenshots/preview-desktop.png
-            docs/screenshots/preview-analysis.png
-            docs/screenshots/preview-mobile.png
