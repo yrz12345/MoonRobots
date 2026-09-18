@@ -1,0 +1,10 @@
+{
+  "name": "moonrobots-web-quality",
+  "private": true,
+  "scripts": {
+    "test:web": "node scripts/verify-web.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

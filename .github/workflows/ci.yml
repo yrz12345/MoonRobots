@@ -29,3 +29,27 @@ jobs:
         run: |
           moon run src/cmd/moonrobots --target native -- diff examples/policy-before.txt examples/policy-after.txt examples/regression-urls.txt --agent MoonBot --json
           moon run src/cmd/moonrobots --target native -- coverage examples/policy-after.txt examples/regression-urls.txt --agent MoonBot --json
+
+  web-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install web quality dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Browser, accessibility and responsive checks
+        run: npm run test:web
+      - name: Upload visual regression artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: moonrobots-web-previews
+          path: |
+            web/preview-desktop.png
+            web/preview-analysis.png
+            web/preview-mobile.png

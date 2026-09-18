@@ -14,11 +14,10 @@
         <span class="moon-mark" aria-hidden="true"></span>
         <span>MOONROBOTS</span>
       </a>
-      <nav class="primary-nav" aria-label="页面导航">
-        <a href="#workspace">判定</a>
-        <a href="#coverage">规则覆盖</a>
-        <a href="#diagnostics">策略诊断</a>
-        <a href="https://github.com/yrz12345/MoonRobots" target="_blank" rel="noreferrer">源码</a>
+      <nav class="mode-switcher" aria-label="分析模式" role="tablist">
+        <button type="button" role="tab" aria-selected="true" aria-controls="evaluate-mode" data-mode="evaluate">单 URL 判定</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="diff-mode" data-mode="diff">策略差异</button>
+        <button type="button" role="tab" aria-selected="false" aria-controls="coverage-mode" data-mode="coverage">覆盖分析</button>
       </nav>
       <div class="engine-state" aria-label="MoonBit 引擎状态">
         <span class="pulse" aria-hidden="true"></span>
@@ -31,7 +30,7 @@
       <section class="intro" aria-labelledby="page-title">
         <div>
           <h1 id="page-title">读懂每一条爬虫规则。</h1>
-          <p>把模糊的允许或拒绝，变成清楚、可靠、可以复查的策略证据。</p>
+          <p id="page-description">把模糊的允许或拒绝，变成清楚、可靠、可以复查的策略证据。</p>
         </div>
         <div id="policy-health" class="policy-health" role="status" aria-live="polite">
           <span class="health-dot" aria-hidden="true"></span>
@@ -39,7 +38,8 @@
         </div>
       </section>
 
-      <section id="workspace" class="workbench" aria-label="robots.txt 策略实验台">
+      <section id="evaluate-mode" class="mode-panel" role="tabpanel" aria-label="单 URL 判定">
+      <div id="workspace" class="workbench" aria-label="robots.txt 策略实验台">
         <div class="query-strip">
           <label class="field">
             <span>USER-AGENT</span>
@@ -58,13 +58,17 @@
           <section class="editor-panel" aria-labelledby="editor-heading">
             <header class="panel-header">
               <h2 id="editor-heading">robots.txt</h2>
-              <div class="examples" aria-label="示例策略">
-                <button type="button" data-example="balanced" class="active">基础</button>
-                <button type="button" data-example="wildcards">通配符</button>
-                <button type="button" data-example="risk">风险策略</button>
+              <div class="editor-actions">
+                <div class="examples" aria-label="示例策略">
+                  <button type="button" data-example="balanced" class="active">基础</button>
+                  <button type="button" data-example="wildcards">通配符</button>
+                  <button type="button" data-example="risk">风险策略</button>
+                </div>
+                <button id="import-policy" class="quiet-button" type="button">导入策略</button>
+                <input id="policy-file" class="file-input" type="file" accept=".txt,text/plain" hidden>
               </div>
             </header>
-            <div class="editor-wrap">
+            <div class="editor-wrap drop-zone" data-drop-target="source">
               <div id="line-numbers" class="line-numbers" aria-hidden="true"></div>
               <textarea id="source" aria-label="robots.txt 内容" spellcheck="false"></textarea>
             </div>
@@ -127,11 +131,107 @@
                 <p class="eyebrow">POLICY HEALTH</p>
                 <h2 id="diagnostics-heading">策略诊断</h2>
               </div>
-              <button id="copy-json" type="button">复制 JSON</button>
+              <div class="export-actions">
+                <button id="copy-json" type="button">复制 JSON</button>
+                <button id="export-eval-json" type="button">下载 JSON</button>
+                <button id="export-eval-md" type="button">下载报告</button>
+              </div>
             </header>
             <ol id="diagnostics-list" class="diagnostics-list"></ol>
             <p id="diagnostics-empty" class="empty-state">没有发现语法或语义风险。</p>
           </aside>
+        </div>
+      </div>
+      </section>
+
+      <section id="diff-mode" class="mode-panel" role="tabpanel" aria-label="策略差异分析" hidden>
+        <div class="analysis-workbench">
+          <header class="analysis-toolbar">
+            <div>
+              <p class="eyebrow">POLICY REGRESSION</p>
+              <h2>策略差异分析</h2>
+            </div>
+            <label class="compact-field"><span>USER-AGENT</span><input id="diff-agent" value="MoonBot" spellcheck="false"></label>
+            <button id="load-diff-example" class="quiet-button" type="button">载入完整示例</button>
+            <button id="run-diff" class="primary-action" type="button">比较策略</button>
+          </header>
+
+          <div class="policy-compare-grid">
+            <section class="analysis-editor drop-zone" data-drop-target="diff-before">
+              <header><div><span>BEFORE</span><h3>部署前策略</h3></div><button id="import-diff-before" class="quiet-button" type="button">导入</button></header>
+              <textarea id="diff-before" aria-label="部署前 robots.txt" spellcheck="false"></textarea>
+              <input id="diff-before-file" class="file-input" type="file" accept=".txt,text/plain" hidden>
+            </section>
+            <section class="analysis-editor drop-zone" data-drop-target="diff-after">
+              <header><div><span>AFTER</span><h3>部署后策略</h3></div><button id="import-diff-after" class="quiet-button" type="button">导入</button></header>
+              <textarea id="diff-after" aria-label="部署后 robots.txt" spellcheck="false"></textarea>
+              <input id="diff-after-file" class="file-input" type="file" accept=".txt,text/plain" hidden>
+            </section>
+          </div>
+
+          <section class="corpus-editor drop-zone" data-drop-target="diff-urls">
+            <header><div><span>URL CORPUS</span><h3>回归 URL 列表</h3></div><button id="import-diff-urls" class="quiet-button" type="button">导入 URL</button></header>
+            <textarea id="diff-urls" aria-label="用于策略差异分析的 URL，每行一个" spellcheck="false"></textarea>
+            <input id="diff-urls-file" class="file-input" type="file" accept=".txt,text/plain" hidden>
+          </section>
+
+          <section id="diff-result" class="analysis-result" aria-labelledby="diff-result-title">
+            <header class="result-toolbar">
+              <div><p class="eyebrow">OBSERVABLE CHANGES</p><h2 id="diff-result-title">行为变化</h2></div>
+              <div class="export-actions"><button id="export-diff-json" type="button">下载 JSON</button><button id="export-diff-md" type="button">下载报告</button></div>
+            </header>
+            <div class="analysis-metrics">
+              <div><span>TOTAL URLS</span><strong id="diff-total">0</strong></div>
+              <div><span>UNCHANGED</span><strong id="diff-unchanged">0</strong></div>
+              <div class="positive"><span>NEWLY ALLOWED</span><strong id="diff-allowed">0</strong></div>
+              <div class="negative"><span>NEWLY DENIED</span><strong id="diff-denied">0</strong></div>
+            </div>
+            <div class="table-wrap analysis-table-wrap">
+              <table><thead><tr><th>变化</th><th>URL</th><th>修改前</th><th>修改后</th><th>新命中规则</th></tr></thead><tbody id="diff-body"></tbody></table>
+              <p id="diff-empty" class="empty-state">两份策略在当前 URL 集合中的最终行为一致。</p>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section id="coverage-mode" class="mode-panel" role="tabpanel" aria-label="规则覆盖分析" hidden>
+        <div class="analysis-workbench">
+          <header class="analysis-toolbar">
+            <div><p class="eyebrow">DYNAMIC COVERAGE</p><h2>规则覆盖分析</h2></div>
+            <label class="compact-field"><span>USER-AGENT</span><input id="coverage-agent" value="MoonBot" spellcheck="false"></label>
+            <button id="load-coverage-example" class="quiet-button" type="button">载入完整示例</button>
+            <button id="run-coverage" class="primary-action" type="button">分析覆盖率</button>
+          </header>
+
+          <div class="coverage-input-grid">
+            <section class="analysis-editor drop-zone" data-drop-target="coverage-source">
+              <header><div><span>SOURCE POLICY</span><h3>robots.txt</h3></div><button id="import-coverage-source" class="quiet-button" type="button">导入策略</button></header>
+              <textarea id="coverage-source" aria-label="用于覆盖分析的 robots.txt" spellcheck="false"></textarea>
+              <input id="coverage-source-file" class="file-input" type="file" accept=".txt,text/plain" hidden>
+            </section>
+            <section class="analysis-editor drop-zone" data-drop-target="coverage-urls">
+              <header><div><span>URL CORPUS</span><h3>URL 列表</h3></div><button id="import-coverage-urls" class="quiet-button" type="button">导入 URL</button></header>
+              <textarea id="coverage-urls" aria-label="用于覆盖分析的 URL，每行一个" spellcheck="false"></textarea>
+              <input id="coverage-urls-file" class="file-input" type="file" accept=".txt,text/plain" hidden>
+            </section>
+          </div>
+
+          <section id="coverage-result" class="analysis-result" aria-labelledby="coverage-result-title">
+            <header class="result-toolbar">
+              <div><p class="eyebrow">RULE UTILIZATION</p><h2 id="coverage-result-title">覆盖结果</h2></div>
+              <div class="export-actions"><button id="export-coverage-json" type="button">下载 JSON</button><button id="export-coverage-md" type="button">下载报告</button></div>
+            </header>
+            <div class="analysis-metrics coverage-metrics">
+              <div><span>TOTAL URLS</span><strong id="coverage-total">0</strong></div>
+              <div class="positive"><span>ALLOWED</span><strong id="coverage-allowed">0</strong></div>
+              <div class="negative"><span>DENIED</span><strong id="coverage-denied">0</strong></div>
+              <div><span>SELECTED GROUP</span><strong id="coverage-groups">—</strong></div>
+            </div>
+            <div class="table-wrap analysis-table-wrap">
+              <table><thead><tr><th>状态</th><th>行</th><th>规则</th><th>匹配 URL</th><th>胜出 URL</th></tr></thead><tbody id="coverage-report-body"></tbody></table>
+              <p id="coverage-report-empty" class="empty-state">当前代理没有选中任何规则。</p>
+            </div>
+          </section>
         </div>
       </section>
     </main>
@@ -139,12 +239,37 @@
     <footer class="site-footer">
       <span>MOONROBOTS / 0.1</span>
       <span>PARSE · NORMALIZE · MATCH · EXPLAIN</span>
-      <a href="https://www.rfc-editor.org/rfc/rfc9309" target="_blank" rel="noreferrer">RFC 9309</a>
+      <span class="footer-actions"><button id="open-tour" type="button">使用引导</button><a href="https://github.com/yrz12345/MoonRobots" target="_blank" rel="noreferrer">源码</a><a href="https://www.rfc-editor.org/rfc/rfc9309" target="_blank" rel="noreferrer">RFC 9309</a></span>
     </footer>
   </div>
+
+  <dialog id="welcome-dialog" class="welcome-dialog" aria-label="MoonRobots 使用引导">
+    <div class="tour-step" data-tour-step="0">
+      <span class="tour-index">01 / 03</span>
+      <h2 id="tour-title">先判定一个 URL</h2>
+      <p>输入爬虫 product token、目标 URL 和 robots.txt。MoonRobots 会给出允许或拒绝结论，并解释最终命中的规则。</p>
+    </div>
+    <div class="tour-step" data-tour-step="1" hidden>
+      <span class="tour-index">02 / 03</span>
+      <h2>部署前发现行为变化</h2>
+      <p>“策略差异”会用同一组 URL 对比新旧策略，专门找出新增允许和新增拒绝，适合作为 CI 发布门禁。</p>
+    </div>
+    <div class="tour-step" data-tour-step="2" hidden>
+      <span class="tour-index">03 / 03</span>
+      <h2>检查规则是否真正生效</h2>
+      <p>“覆盖分析”统计每条规则匹配和胜出的次数，帮助识别有效、被遮蔽和从未命中的规则。</p>
+    </div>
+    <div class="tour-footer">
+      <button id="tour-skip" class="quiet-button" type="button">跳过引导</button>
+      <span class="tour-spacer"></span>
+      <button id="tour-back" class="quiet-button" type="button" hidden>上一步</button>
+      <button id="tour-next" class="primary-action" type="button">下一步</button>
+    </div>
+  </dialog>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
   <script src="assets/moonrobots.js"></script>
   <script src="app.js"></script>
+  <script src="analysis.js"></script>
 </body>
 </html>

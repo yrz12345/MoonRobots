@@ -213,4 +213,15 @@ Sitemap: relative-sitemap.xml
   source.value = examples.balanced;
   updateLineNumbers();
   run();
+
+  globalThis.MoonRobotsWorkbench = Object.freeze({
+    getEvaluationResult: () => latestResult,
+    loadPolicy(text) {
+      source.value = text;
+      updateLineNumbers();
+      run();
+    },
+    rerun: run,
+    showToast,
+  });
 })();

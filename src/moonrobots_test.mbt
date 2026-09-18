@@ -348,3 +348,78 @@ test "comparison and coverage JSON expose stable summary fields" {
   }
   assert_eq(coverage_fields.get("totalUrls"), Some(Json(2)))
 }
+
+///|
+test "robots.txt query remains implicitly allowed" {
+  let robots = parse("User-agent: *\nDisallow: /\n")
+  assert_true(is_allowed(robots, "Bot", "/robots.txt?cache=1"))
+  assert_true(
+    is_allowed(robots, "Bot", "https://example.com/robots.txt?cache=1#top"),
+  )
+  assert_false(is_allowed(robots, "Bot", "/robots.txt/backup"))
+}
+
+///|
+test "absolute URLs without a path normalize to slash plus query" {
+  let robots = parse(
+    (
+      #|User-agent: *
+      #|Disallow: /
+      #|Allow: /?preview=1$
+      #|
+    ),
+  )
+  let root = evaluate(robots, "Bot", "https://example.com")
+  inspect(root.path, content="/")
+  assert_false(root.allowed)
+  let preview = evaluate(robots, "Bot", "https://example.com?preview=1#demo")
+  inspect(preview.path, content="/?preview=1")
+  assert_true(preview.allowed)
+}
+
+///|
+test "consecutive product tokens share the following rules" {
+  let robots = parse(
+    (
+      #|User-agent: AlphaBot
+      #|User-agent: BetaBot
+      #|Disallow: /shared/
+      #|
+    ),
+  )
+  inspect(robots.groups.length(), content="1")
+  assert_false(is_allowed(robots, "AlphaBot", "/shared/a"))
+  assert_false(is_allowed(robots, "betabot", "/shared/a"))
+  assert_true(is_allowed(robots, "OtherBot", "/shared/a"))
+}
+
+///|
+test "empty allow and disallow records have no matching effect" {
+  let robots = parse(
+    (
+      #|User-agent: EmptyBot
+      #|Disallow:
+      #|Allow:
+      #|User-agent: BlockBot
+      #|Disallow: /
+      #|
+    ),
+  )
+  assert_true(is_allowed(robots, "EmptyBot", "/anything"))
+  assert_false(is_allowed(robots, "BlockBot", "/anything"))
+}
+
+///|
+test "reserved percent octets stay encoded and hex matching is case insensitive" {
+  let robots = parse(
+    (
+      #|User-agent: *
+      #|Disallow: /encoded%2Fslash
+      #|Disallow: /hash%23value
+      #|
+    ),
+  )
+  assert_false(is_allowed(robots, "Bot", "/encoded%2fslash"))
+  assert_true(is_allowed(robots, "Bot", "/encoded/slash"))
+  assert_false(is_allowed(robots, "Bot", "/hash%23value"))
+}

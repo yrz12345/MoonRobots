@@ -31,9 +31,14 @@ robots.txt + crawler product token + URL
 - `--json` 结构化输出，可直接接入 CI、爬虫和 AI Agent
 - 语义 lint：重复规则、空分组、全站禁止、异常 Sitemap 等
 - 核心库在 Native、JavaScript、Wasm 和 Wasm-GC 后端测试
-- 零服务端浏览器实验台，直接运行 MoonBit 编译出的 JavaScript 引擎
+- 零服务端浏览器实验台：单 URL 判定、策略差异和规则覆盖三种工作模式
+- 浏览器支持策略与 URL 文件导入、拖放导入，以及 JSON/Markdown 报告导出
+- 首次使用引导、键盘可访问模式切换和响应式移动端布局
+- 自动化浏览器、无障碍、文件导入导出与布局回归检查
 
 ![MoonRobots 浏览器策略实验台](web/preview-desktop.png)
+
+![MoonRobots 策略差异分析](web/preview-analysis.png)
 
 ## 快速开始
 
@@ -47,7 +52,13 @@ moon test --target all
 
 ### 浏览器实验台
 
-直接双击打开 `web/index.html`，即可编辑策略、切换示例并查看判定轨迹。页面不请求远端服务，所有解析与匹配都在浏览器内由 MoonBit 编译产物完成。
+直接双击打开 `web/index.html`，即可使用三种模式：
+
+- **单 URL 判定**：解释允许或拒绝结论、命中规则与全部候选规则。
+- **策略差异**：用同一组 URL 比较部署前后的最终访问行为。
+- **覆盖分析**：统计规则匹配与胜出次数，识别被遮蔽和从未命中的规则。
+
+策略文件和 URL 列表可以通过按钮或拖放导入，结果可导出为 JSON 或 Markdown。页面不请求远端服务，所有解析与匹配都在浏览器内由 MoonBit 编译产物完成。
 
 修改核心或浏览器 API 后，重新生成运行时：
 
@@ -55,11 +66,15 @@ moon test --target all
 .\scripts\build-web.ps1
 ```
 
-如果本地已安装 Playwright，可执行交互回归测试：
+安装并执行网页质量检查：
 
 ```powershell
-node scripts\verify-web.cjs
+npm ci
+npx playwright install chromium
+npm run test:web
 ```
+
+该检查覆盖首次使用引导、三种工作模式、文件导入、报告导出、基础无障碍规则、桌面/移动端水平溢出、触控尺寸和浏览器错误，并生成三张视觉回归截图。
 
 判断一个 URL：
 
@@ -207,6 +222,7 @@ web/               interactive policy workbench
 scripts/           reproducible web build and browser verification
 examples/         runnable policies and URL lists
 docs/competition/ competition proposal and acceptance checklist
+package.json       reproducible Playwright web-quality checks
 ```
 
 ## 标准范围
@@ -231,6 +247,8 @@ moon check --target all --deny-warn
 moon test --target all
 moon info
 moon build src/cmd/moonrobots --target native --release
+npm ci
+npm run test:web
 ```
 
 ## 路线图

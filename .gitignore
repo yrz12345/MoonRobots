@@ -1,10 +1,12 @@
 /_build/
 /.mooncakes/
+/node_modules/
 *.wat
 *.wasm
 *.js
 *.map
 !web/app.js
+!web/analysis.js
 !web/assets/moonrobots.js
 !scripts/verify-web.cjs
 /docs/design/
