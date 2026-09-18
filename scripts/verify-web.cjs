@@ -60,6 +60,26 @@ async function dismissTour(page) {
   }
 }
 
+async function verifyTourPersistence(page) {
+  await page.waitForTimeout(350);
+  const dialog = page.locator("#welcome-dialog");
+  assert(await dialog.isVisible(), "tour should appear on the first launch");
+  assert((await page.locator("[data-tour-step]:visible").count()) === 1, "tour should show one step at a time");
+
+  // Simulate closing the app before finishing the tour.
+  await page.reload();
+  await page.waitForTimeout(350);
+  assert(!(await dialog.isVisible()), "tour should not reopen after the first launch");
+
+  // The footer entry must remain available for users who want to see it again.
+  await page.getByRole("button", { name: "使用引导" }).click();
+  assert(await dialog.isVisible(), "tour should remain manually accessible");
+  await page.getByRole("button", { name: "下一步" }).click();
+  await page.getByRole("button", { name: "下一步" }).click();
+  await page.getByRole("button", { name: "开始使用" }).click();
+  assert(!(await dialog.isVisible()), "tour should close after completion");
+}
+
 (async () => {
   const screenshotsDir = path.resolve("docs/screenshots");
   fs.mkdirSync(screenshotsDir, { recursive: true });
@@ -74,7 +94,7 @@ async function dismissTour(page) {
 
   const pageUrl = pathToFileURL(path.resolve("web/index.html")).href;
   await page.goto(pageUrl);
-  await dismissTour(page);
+  await verifyTourPersistence(page);
   await assertAccessible(page, "desktop");
 
   assert((await page.locator("#decision-word").textContent()) === "允许抓取", "default scenario should allow");

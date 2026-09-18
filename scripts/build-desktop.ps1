@@ -26,10 +26,12 @@ $targetRoot = if ($env:CARGO_TARGET_DIR) {
 $releaseRoot = Join-Path $targetRoot "release"
 $installer = Join-Path $releaseRoot "bundle\nsis\MoonRobots_0.1.0_x64-setup.exe"
 $portable = Join-Path $releaseRoot "moonrobots-desktop.exe"
-$dist = Join-Path $projectRoot "dist"
+$installerFolderName = -join @([char]0x5B89, [char]0x88C5, [char]0x5305)
+$installerDir = Join-Path $projectRoot $installerFolderName
 
-New-Item -ItemType Directory -Path $dist -Force | Out-Null
-Copy-Item -LiteralPath $installer -Destination (Join-Path $dist "MoonRobots-Setup.exe") -Force
-Copy-Item -LiteralPath $portable -Destination (Join-Path $dist "MoonRobots-Portable.exe") -Force
+New-Item -ItemType Directory -Path $installerDir -Force | Out-Null
+Copy-Item -LiteralPath $installer -Destination (Join-Path $installerDir "MoonRobots-Setup.exe") -Force
+Copy-Item -LiteralPath $portable -Destination (Join-Path $projectRoot "MoonRobots.exe") -Force
 
-Write-Host "Desktop packages are ready in $dist"
+Write-Host "MoonRobots.exe is ready in $projectRoot"
+Write-Host "The installer is ready in $installerDir"

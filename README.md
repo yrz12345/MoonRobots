@@ -41,7 +41,7 @@ robots.txt + crawler product token + URL
 
 ### Windows 桌面版（从源码构建）
 
-GitHub 仓库仅维护项目源代码，不提交或发布预编译安装包。按照下方“本地开发”步骤执行 `npm run desktop:build` 后，可在 `dist/` 中获得安装版和便携版。桌面工作台完全在本机运行，不会上传策略文件或 URL 数据，并提供三种模式：
+GitHub 仓库仅维护项目源代码，不提交或发布预编译安装包。按照下方“本地开发”步骤执行 `npm run desktop:build` 后，可直接从项目根目录运行 `MoonRobots.exe`，安装程序保存在 `安装包/`。桌面工作台完全在本机运行，不会上传策略文件或 URL 数据，并提供三种模式：
 
 - **单 URL 判定**：解释允许或拒绝结论、命中规则与全部候选规则。
 - **策略差异**：使用同一组 URL 比较部署前后的最终访问行为。
@@ -72,7 +72,7 @@ npm run desktop:dev
 npm run desktop:build
 ```
 
-构建完成后，可直接分发的安装版和便携版统一输出到 `dist/`；`src-tauri/target/` 仅保存编译缓存和中间产物。
+构建完成后，便携版输出为根目录的 `MoonRobots.exe`，安装版输出到 `安装包/`；`src-tauri/target/` 仅保存编译缓存和中间产物。
 
 修改核心或浏览器 API 后，重新生成运行时：
 
@@ -239,7 +239,8 @@ src-tauri/         Tauri desktop shell and Windows packaging
 docs/screenshots/  documentation and regression screenshots
 scripts/           reproducible web build and browser verification
 examples/         runnable policies and URL lists
-dist/              local distributable packages (ignored by Git)
+MoonRobots.exe     local portable application (ignored by Git)
+安装包/             local installer output (ignored by Git)
 package.json       reproducible Playwright web-quality checks
 ```
 

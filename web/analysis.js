@@ -341,8 +341,11 @@ ${rows}
       $("#tour-back").hidden = index === 0;
       $("#tour-next").textContent = index === steps.length - 1 ? "开始使用" : "下一步";
     }
-    function rememberAndClose() {
+    function rememberSeen() {
       try { localStorage.setItem(storageKey, "done"); } catch { /* file storage can be unavailable */ }
+    }
+    function rememberAndClose() {
+      rememberSeen();
       dialog.close();
     }
     function openTour() {
@@ -358,11 +361,12 @@ ${rows}
     $("#tour-back").addEventListener("click", () => { index = Math.max(0, index - 1); renderStep(); });
     $("#tour-skip").addEventListener("click", rememberAndClose);
     $("#open-tour").addEventListener("click", openTour);
-    dialog.addEventListener("cancel", () => {
-      try { localStorage.setItem(storageKey, "done"); } catch { /* no-op */ }
-    });
+    dialog.addEventListener("cancel", rememberSeen);
     let seen = false;
     try { seen = localStorage.getItem(storageKey) === "done"; } catch { /* no-op */ }
+    // Showing the automatic tour counts as the first-run experience. Persist it
+    // immediately so closing the app mid-tour does not reopen it next launch.
+    if (!seen) rememberSeen();
     if (!seen || new URLSearchParams(location.search).has("tour")) window.setTimeout(openTour, 250);
   }
 
