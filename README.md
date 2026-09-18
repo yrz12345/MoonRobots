@@ -1,8 +1,14 @@
 # MoonRobots
 
-MoonRobots 是一个使用 MoonBit 实现的、可解释的 `robots.txt` 解析与访问决策引擎。它面向搜索引擎、AI Agent、RAG 数据采集器、链接检查器和网站审计工具，聚焦 [RFC 9309](https://www.rfc-editor.org/rfc/rfc9309.html) 中最容易实现错误的解析与匹配语义。
+[![CI](https://github.com/yrz12345/MoonRobots/actions/workflows/ci.yml/badge.svg)](https://github.com/yrz12345/MoonRobots/actions/workflows/ci.yml)
+[![Web Demo](https://img.shields.io/badge/Web-Demo-111111)](https://yrz12345.github.io/MoonRobots/)
+[![License](https://img.shields.io/badge/License-Apache--2.0-555555.svg)](LICENSE)
 
-**在线演示：<https://yrz12345.github.io/MoonRobots/>**
+MoonRobots 是一个使用 MoonBit 实现的可解释 `robots.txt` 解析与访问决策引擎。项目遵循 [RFC 9309](https://www.rfc-editor.org/rfc/rfc9309.html) 的核心语义，为搜索引擎、AI Agent、RAG 数据采集器、链接检查器及站点审计系统提供一致、可复查的爬虫策略判定。
+
+项目同时提供核心库、原生命令行工具和零服务端浏览器工作台。每次判定不仅返回允许或拒绝结果，还会说明选中的 User-agent 分组、最终命中的规则、源文件行号、匹配特异度和候选规则轨迹。
+
+**在线工作台：<https://yrz12345.github.io/MoonRobots/>**
 
 ```text
 robots.txt + crawler product token + URL
@@ -15,32 +21,38 @@ robots.txt + crawler product token + URL
    ALLOWED / DENIED       matched rule + line
 ```
 
-## 特性
+## 核心能力
 
-- 容错解析 `User-agent`、`Allow`、`Disallow` 和 `Sitemap`
-- RFC 9309 User-agent 分组选择及同名分组合并
-- 最长规则优先；同长度冲突时 `Allow` 优先
-- 支持 `*` 通配符和 `$` 结尾锚点
-- UTF-8 与百分号编码规范化
-- 对 `/robots.txt` 的隐式允许
-- 返回命中规则、源码行号和决策原因，而不只是一个布尔值
-- 提供完整评估轨迹：每条候选规则的标准化结果、匹配状态与特异度
-- `check`、`inspect`、`lint`、`batch`、`coverage`、`diff` 六个 CLI 命令
-- 策略回归分析：比较新旧策略并定位新增允许与新增拒绝
-- URL 语料覆盖率：识别活跃、从未匹配和动态遮蔽的规则
-- `--json` 结构化输出，可直接接入 CI、爬虫和 AI Agent
-- 语义 lint：重复规则、空分组、全站禁止、异常 Sitemap 等
-- 核心库在 Native、JavaScript、Wasm 和 Wasm-GC 后端测试
-- 零服务端浏览器实验台：单 URL 判定、策略差异和规则覆盖三种工作模式
-- 浏览器支持策略与 URL 文件导入、拖放导入，以及 JSON/Markdown 报告导出
-- 首次使用引导、键盘可访问模式切换和响应式移动端布局
-- 自动化浏览器、无障碍、文件导入导出与布局回归检查
+| 领域 | 能力 |
+| --- | --- |
+| 协议解析 | 容错解析 `User-agent`、`Allow`、`Disallow` 和 `Sitemap`，支持同名分组合并 |
+| 规则匹配 | 最长规则优先；同长度冲突时 `Allow` 优先；支持 `*` 通配符和 `$` 结尾锚点 |
+| URL 规范化 | 处理 UTF-8、百分号编码、路径与查询字符串，并隐式允许 `/robots.txt` |
+| 可解释判定 | 返回命中规则、源码行号、决策原因、匹配特异度及完整候选规则轨迹 |
+| 策略质量 | 检测重复规则、空分组、全站禁止、异常 Sitemap 及其他语义风险 |
+| 变更分析 | 比较新旧策略，定位新增允许和新增拒绝的 URL |
+| 动态覆盖率 | 识别活跃、被遮蔽和从未命中的规则 |
+| 工具接口 | 提供 MoonBit 核心库、六个 CLI 命令、浏览器 API 及 JSON 输出 |
+| Web 工作台 | 支持单 URL 判定、策略差异、规则覆盖、文件拖放和 JSON/Markdown 导出 |
+| 质量保障 | 在 Native、JavaScript、Wasm 和 Wasm-GC 后端执行测试，并运行浏览器回归检查 |
 
 ![MoonRobots 浏览器策略实验台](web/preview-desktop.png)
 
 ![MoonRobots 策略差异分析](web/preview-analysis.png)
 
-## 快速开始
+## 使用方式
+
+### 在线工作台
+
+访问 <https://yrz12345.github.io/MoonRobots/>，无需安装任何服务。浏览器工作台提供三种模式：
+
+- **单 URL 判定**：解释允许或拒绝结论、命中规则与全部候选规则。
+- **策略差异**：使用同一组 URL 比较部署前后的最终访问行为。
+- **覆盖分析**：统计规则匹配与胜出次数，识别被遮蔽和从未命中的规则。
+
+策略文件和 URL 列表可通过按钮或拖放导入，分析结果可导出为 JSON 或 Markdown。页面不会上传输入内容，所有解析与匹配均在浏览器内由 MoonBit 编译产物完成。
+
+### 本地开发
 
 环境要求：近期版本的 MoonBit 工具链。
 
@@ -50,15 +62,7 @@ moon check --target all --deny-warn
 moon test --target all
 ```
 
-### 浏览器实验台
-
-直接双击打开 `web/index.html`，即可使用三种模式：
-
-- **单 URL 判定**：解释允许或拒绝结论、命中规则与全部候选规则。
-- **策略差异**：用同一组 URL 比较部署前后的最终访问行为。
-- **覆盖分析**：统计规则匹配与胜出次数，识别被遮蔽和从未命中的规则。
-
-策略文件和 URL 列表可以通过按钮或拖放导入，结果可导出为 JSON 或 Markdown。页面不请求远端服务，所有解析与匹配都在浏览器内由 MoonBit 编译产物完成。
+直接打开 `web/index.html` 即可运行浏览器工作台。
 
 修改核心或浏览器 API 后，重新生成运行时：
 
@@ -76,7 +80,9 @@ npm run test:web
 
 该检查覆盖首次使用引导、三种工作模式、文件导入、报告导出、基础无障碍规则、桌面/移动端水平溢出、触控尺寸和浏览器错误，并生成三张视觉回归截图。
 
-判断一个 URL：
+### 命令行工具
+
+判断单个 URL：
 
 ```powershell
 moon run src/cmd/moonrobots --target native -- check examples/basic.txt --agent MoonBot --url https://example.com/admin/settings
@@ -221,7 +227,6 @@ src/web_api/       browser-facing foreign library
 web/               interactive policy workbench
 scripts/           reproducible web build and browser verification
 examples/         runnable policies and URL lists
-docs/competition/ competition proposal and acceptance checklist
 package.json       reproducible Playwright web-quality checks
 ```
 
