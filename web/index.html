@@ -5,36 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="MoonRobots RFC 9309 可解释策略实验台">
   <title>MoonRobots · Policy Workbench</title>
-  <link rel="stylesheet" href="styles-bplus.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles-editorial.css">
 </head>
 <body>
+  <!--
+    Redesign assumptions:
+    - Keep the complete MoonRobots analysis workflow; this is a visual-system iteration, not a feature reduction.
+    - Translate the supplied reference through monochrome editorial typography, thin rules and deliberate whitespace.
+    - Reserve green/red for semantic outcomes only; avoid gradients, ornamental cards and generic dashboard chrome.
+  -->
   <div class="app-shell">
     <header class="topbar">
       <a class="wordmark" href="#workspace" aria-label="MoonRobots 首页">
         <span class="moon-mark" aria-hidden="true"></span>
-        <span>MOONROBOTS</span>
+        <span class="wordmark-copy"><strong>MOONROBOTS</strong><small>RFC 9309 LAB</small></span>
       </a>
       <nav class="mode-switcher" aria-label="分析模式" role="tablist">
         <button type="button" role="tab" aria-selected="true" aria-controls="evaluate-mode" data-mode="evaluate">单 URL 判定</button>
         <button type="button" role="tab" aria-selected="false" aria-controls="diff-mode" data-mode="diff">策略差异</button>
         <button type="button" role="tab" aria-selected="false" aria-controls="coverage-mode" data-mode="coverage">覆盖分析</button>
       </nav>
-      <div class="engine-state" aria-label="MoonBit 引擎状态">
-        <span class="pulse" aria-hidden="true"></span>
-        <span>MOONBIT ENGINE</span>
-        <strong id="engine-version">LOADING</strong>
+      <div class="topbar-tail">
+        <div class="engine-state" aria-label="MoonBit 引擎状态">
+          <span class="pulse" aria-hidden="true"></span>
+          <span>MOONBIT ENGINE</span>
+          <strong id="engine-version">LOADING</strong>
+        </div>
+        <a class="header-link" href="https://github.com/yrz12345/MoonRobots" target="_blank" rel="noreferrer">GITHUB ↗</a>
       </div>
     </header>
 
     <main class="page-main">
       <section class="intro" aria-labelledby="page-title">
-        <div>
-          <h1 id="page-title">读懂每一条爬虫规则。</h1>
-          <p id="page-description">把模糊的允许或拒绝，变成清楚、可靠、可以复查的策略证据。</p>
+        <div class="intro-copy">
+          <p class="intro-label">AN RFC-NATIVE POLICY WORKBENCH<br>BUILT WITH MOONBIT</p>
+          <h1 id="page-title"><span>规则不只决定通行。</span><span>它解释为什么。</span></h1>
         </div>
-        <div id="policy-health" class="policy-health" role="status" aria-live="polite">
-          <span class="health-dot" aria-hidden="true"></span>
-          <span id="policy-health-label">正在检查策略状态…</span>
+        <div class="intro-aside">
+          <pre class="pixel-signature" aria-hidden="true">  ▄██▄
+▄██████▄
+██ ▀▀ ██
+▀█▄██▄█▀
+  ▀  ▀</pre>
+          <div class="intro-aside-copy">
+            <p id="page-description">把模糊的允许或拒绝，变成清楚、可靠、可以复查的策略证据。</p>
+            <div id="policy-health" class="policy-health" role="status" aria-live="polite">
+              <span class="health-dot" aria-hidden="true"></span>
+              <span id="policy-health-label">正在检查策略状态…</span>
+            </div>
+          </div>
+        </div>
+        <div class="intro-index" aria-hidden="true">
+          <span>PARSE</span><span>NORMALIZE</span><span>MATCH</span><span>EXPLAIN</span><b>00 / 100</b>
         </div>
       </section>
 

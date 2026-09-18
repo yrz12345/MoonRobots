@@ -40,15 +40,15 @@ https://example.com/public/home
 
   const modeCopy = {
     evaluate: {
-      title: "读懂每一条爬虫规则。",
+      title: ["规则不只决定通行。", "它解释为什么。"],
       description: "把模糊的允许或拒绝，变成清楚、可靠、可以复查的策略证据。",
     },
     diff: {
-      title: "在部署前，看见策略影响。",
+      title: ["在部署前，", "看见策略影响。"],
       description: "用真实 URL 集合比较新旧策略，只呈现最终访问行为发生变化的部分。",
     },
     coverage: {
-      title: "确认每条规则都真正生效。",
+      title: ["确认每条规则，", "都真正生效。"],
       description: "统计规则在 URL 语料中的匹配与胜出次数，找出被遮蔽和从未命中的配置。",
     },
   };
@@ -93,7 +93,12 @@ https://example.com/public/home
     $$(".mode-panel").forEach((panel) => {
       panel.hidden = panel.id !== `${mode}-mode`;
     });
-    $("#page-title").textContent = modeCopy[mode].title;
+    const title = $("#page-title");
+    title.replaceChildren(...modeCopy[mode].title.map((line) => {
+      const span = document.createElement("span");
+      span.textContent = line;
+      return span;
+    }));
     $("#page-description").textContent = modeCopy[mode].description;
     if (updateHash) history.replaceState(null, "", mode === "evaluate" ? "#evaluate" : `#${mode}`);
     restoreModeHealth();
