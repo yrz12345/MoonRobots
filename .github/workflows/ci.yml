@@ -50,6 +50,6 @@ jobs:
         with:
           name: moonrobots-web-previews
           path: |
-            web/preview-desktop.png
-            web/preview-analysis.png
-            web/preview-mobile.png
+            docs/screenshots/preview-desktop.png
+            docs/screenshots/preview-analysis.png
+            docs/screenshots/preview-mobile.png

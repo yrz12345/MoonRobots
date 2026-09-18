@@ -1,3 +1,4 @@
+const fs = require("node:fs");
 const path = require("node:path");
 const { pathToFileURL } = require("node:url");
 
@@ -60,6 +61,9 @@ async function dismissTour(page) {
 }
 
 (async () => {
+  const screenshotsDir = path.resolve("docs/screenshots");
+  fs.mkdirSync(screenshotsDir, { recursive: true });
+
   const browser = await launchBrowser();
   const errors = [];
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
@@ -144,10 +148,10 @@ async function dismissTour(page) {
 
   await page.getByRole("tab", { name: "策略差异" }).click();
   await page.waitForTimeout(2100);
-  await page.screenshot({ path: path.resolve("web/preview-analysis.png"), fullPage: true });
+  await page.screenshot({ path: path.join(screenshotsDir, "preview-analysis.png"), fullPage: true });
   await page.getByRole("tab", { name: "单 URL 判定" }).click();
   await page.waitForTimeout(300);
-  await page.screenshot({ path: path.resolve("web/preview-desktop.png"), fullPage: true });
+  await page.screenshot({ path: path.join(screenshotsDir, "preview-desktop.png"), fullPage: true });
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
   mobile.on("console", (message) => {
@@ -163,7 +167,7 @@ async function dismissTour(page) {
     buttons.filter((button) => button.getBoundingClientRect().height < 40).map((button) => button.textContent.trim()),
   );
   assert(smallTargets.length === 0, `mobile buttons below 40px: ${smallTargets.join(", ")}`);
-  await mobile.screenshot({ path: path.resolve("web/preview-mobile.png"), fullPage: true });
+  await mobile.screenshot({ path: path.join(screenshotsDir, "preview-mobile.png"), fullPage: true });
 
   assert(errors.length === 0, `browser errors: ${errors.join(" | ")}`);
   await browser.close();

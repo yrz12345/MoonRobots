@@ -36,9 +36,9 @@ robots.txt + crawler product token + URL
 | 桌面工作台 | 支持单 URL 判定、策略差异、规则覆盖、文件拖放和 JSON/Markdown 导出 |
 | 质量保障 | 在 Native、JavaScript、Wasm 和 Wasm-GC 后端执行测试，并运行浏览器回归检查 |
 
-![MoonRobots 桌面策略工作台](web/preview-desktop.png)
+![MoonRobots 桌面策略工作台](docs/screenshots/preview-desktop.png)
 
-![MoonRobots 策略差异分析](web/preview-analysis.png)
+![MoonRobots 策略差异分析](docs/screenshots/preview-analysis.png)
 
 ## 使用方式
 
@@ -75,7 +75,7 @@ npm run desktop:dev
 npm run desktop:build
 ```
 
-安装程序输出到 `src-tauri/target/release/bundle/nsis/`。
+构建完成后，可直接分发的安装版和便携版统一输出到 `dist/`；`src-tauri/target/` 仅保存编译缓存和中间产物。
 
 修改核心或浏览器 API 后，重新生成运行时：
 
@@ -239,8 +239,10 @@ src/cmd/moonrobots/ native CLI
 src/web_api/       browser-facing foreign library
 web/               desktop workbench frontend assets
 src-tauri/         Tauri desktop shell and Windows packaging
+docs/screenshots/  documentation and regression screenshots
 scripts/           reproducible web build and browser verification
 examples/         runnable policies and URL lists
+dist/              local distributable packages (ignored by Git)
 package.json       reproducible Playwright web-quality checks
 ```
 
