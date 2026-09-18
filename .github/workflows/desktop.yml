@@ -27,6 +27,8 @@ jobs:
           rustup default stable
       - name: Install JavaScript dependencies
         run: npm ci
+      - name: Install Chromium
+        run: npx playwright install chromium
       - name: Verify browser workbench
         run: npm run test:web
       - name: Build Windows installer
