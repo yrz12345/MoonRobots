@@ -64,6 +64,65 @@ pub fn evaluation_trace_json(trace : EvaluationTrace) -> Json {
 }
 
 ///|
+/// Convert a policy comparison to stable JSON for CI integrations.
+pub fn policy_comparison_json(comparison : PolicyComparison) -> Json {
+  let changes : Array[Json] = comparison.changes.map(change => {
+    let kind = match change.kind {
+      NewlyAllowed => "newly_allowed"
+      NewlyDenied => "newly_denied"
+    }
+    let value : Json = {
+      "url": Json(change.url),
+      "kind": Json(kind),
+      "before": decision_json(change.before_decision),
+      "after": decision_json(change.after_decision),
+    }
+    value
+  })
+  let result : Json = {
+    "userAgent": Json(comparison.user_agent),
+    "totalUrls": Json(comparison.total_urls),
+    "unchanged": Json(comparison.unchanged),
+    "newlyAllowed": Json(comparison.newly_allowed),
+    "newlyDenied": Json(comparison.newly_denied),
+    "changes": Json(changes),
+  }
+  result
+}
+
+///|
+/// Convert a dynamic rule coverage report to stable JSON.
+pub fn coverage_report_json(report : CoverageReport) -> Json {
+  let rules : Array[Json] = report.rules.map(item => {
+    let status = if item.matched_urls == 0 {
+      "never_matched"
+    } else if item.winning_urls == 0 {
+      "shadowed"
+    } else {
+      "active"
+    }
+    let value : Json = {
+      "kind": Json(rule_kind_name(item.rule.kind)),
+      "pattern": Json(item.rule.pattern),
+      "line": Json(item.rule.line),
+      "matchedUrls": Json(item.matched_urls),
+      "winningUrls": Json(item.winning_urls),
+      "status": Json(status),
+    }
+    value
+  })
+  let result : Json = {
+    "userAgent": Json(report.user_agent),
+    "selectedAgents": Json(report.selected_agents),
+    "totalUrls": Json(report.total_urls),
+    "allowed": Json(report.allowed),
+    "denied": Json(report.denied),
+    "rules": Json(rules),
+  }
+  result
+}
+
+///|
 /// Convert a diagnostic to stable JSON for CI and editor integrations.
 pub fn diagnostic_json(item : Diagnostic) -> Json {
   let severity = match item.severity {

@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /private/
+Allow: /private/public/
+Disallow: /drafts/
+Disallow: /experiments/
+
+User-agent: MoonBot
+Disallow: /internal/
+Disallow: /internal/status
+Allow: /internal/status
+Disallow: /internal/status/debug
+Disallow: /unused/

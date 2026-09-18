@@ -1,0 +1,8 @@
+https://example.com/private/report
+https://example.com/private/public/guide
+https://example.com/drafts/post
+https://example.com/experiments/new-ui
+https://example.com/internal/report
+https://example.com/internal/status
+https://example.com/internal/status/debug
+https://example.com/public/home

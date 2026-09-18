@@ -8,12 +8,16 @@ fn usage() -> Unit {
     #|  moonrobots inspect <robots.txt>
     #|  moonrobots lint <robots.txt> [--json]
     #|  moonrobots batch <robots.txt> <urls.txt> --agent <name> [--json]
+    #|  moonrobots coverage <robots.txt> <urls.txt> --agent <name> [--json]
+    #|  moonrobots diff <before.txt> <after.txt> <urls.txt> --agent <name> [--json]
     #|
     #|Examples:
     #|  moon run src/cmd/moonrobots --target native -- check examples/basic.txt --agent MoonBot --url /private/a
     #|  moon run src/cmd/moonrobots --target native -- inspect examples/basic.txt
     #|  moon run src/cmd/moonrobots --target native -- lint examples/malformed.txt
     #|  moon run src/cmd/moonrobots --target native -- batch examples/basic.txt examples/urls.txt --agent MoonBot
+    #|  moon run src/cmd/moonrobots --target native -- coverage examples/basic.txt examples/urls.txt --agent MoonBot
+    #|  moon run src/cmd/moonrobots --target native -- diff examples/policy-before.txt examples/policy-after.txt examples/regression-urls.txt --agent MoonBot
     #|
   println(help)
 }
@@ -62,6 +66,18 @@ fn reason_text(reason : @robots.DecisionReason) -> String {
 ///|
 fn read_robots(path : String) -> @robots.RobotsFile raise {
   @robots.parse(@fs.read_file_to_string(path))
+}
+
+///|
+fn read_urls(path : String) -> Array[String] raise {
+  let urls : Array[String] = []
+  for raw in @fs.read_file_to_string(path).split("\n") {
+    let url = raw.trim().to_owned()
+    if url != "" && !url.has_prefix("#") {
+      urls.push(url)
+    }
+  }
+  urls
 }
 
 ///|
@@ -175,16 +191,12 @@ fn run_batch(args : Array[String]) -> Unit raise {
     return
   }
   let robots = read_robots(args[2])
-  let urls = @fs.read_file_to_string(args[3])
+  let urls = read_urls(args[3])
   let mut allowed = 0
   let mut denied = 0
   let results : Array[Json] = []
   let json_output = has_flag(args, "--json")
-  for raw in urls.split("\n") {
-    let url = raw.trim().to_owned()
-    if url == "" || url.has_prefix("#") {
-      continue
-    }
+  for url in urls {
     let decision = @robots.evaluate(robots, agent, url)
     let item : Json = {
       "url": Json(url),
@@ -221,6 +233,105 @@ fn run_batch(args : Array[String]) -> Unit raise {
 }
 
 ///|
+fn run_coverage(args : Array[String]) -> Unit raise {
+  guard args.length() >= 4 else {
+    usage()
+    return
+  }
+  guard option(args, "--agent") is Some(agent) else {
+    println("error: --agent is required")
+    return
+  }
+  let report = @robots.analyze_coverage(
+    read_robots(args[2]),
+    agent,
+    read_urls(args[3]),
+  )
+  if has_flag(args, "--json") {
+    println(@robots.coverage_report_json(report).stringify(indent=2))
+    return
+  }
+  println("RULE COVERAGE")
+  println("Crawler: " + report.user_agent)
+  if report.selected_agents.length() > 0 {
+    println("Selected group: " + report.selected_agents.join(", "))
+  }
+  println(
+    "URLs: \{report.total_urls} (\{report.allowed} allowed, \{report.denied} denied)",
+  )
+  println("")
+  if report.rules.length() == 0 {
+    println("No rules selected for this crawler.")
+    return
+  }
+  for item in report.rules {
+    let status = if item.matched_urls == 0 {
+      "NEVER MATCHED"
+    } else if item.winning_urls == 0 {
+      "SHADOWED"
+    } else {
+      "ACTIVE"
+    }
+    println(
+      "\{status}\tline \{item.rule.line}\t\{kind_name(item.rule.kind)}: \{item.rule.pattern}\tmatched \{item.matched_urls}\twon \{item.winning_urls}",
+    )
+  }
+}
+
+///|
+fn decision_summary(decision : @robots.Decision) -> String {
+  let outcome = if decision.allowed { "ALLOWED" } else { "DENIED" }
+  match decision.matched_rule {
+    Some(rule) =>
+      "\{outcome} by \{kind_name(rule.kind)}: \{rule.pattern} (line \{rule.line})"
+    None => outcome
+  }
+}
+
+///|
+fn run_diff(args : Array[String]) -> Unit raise {
+  guard args.length() >= 5 else {
+    usage()
+    return
+  }
+  guard option(args, "--agent") is Some(agent) else {
+    println("error: --agent is required")
+    return
+  }
+  let comparison = @robots.compare_policies(
+    read_robots(args[2]),
+    read_robots(args[3]),
+    agent,
+    read_urls(args[4]),
+  )
+  if has_flag(args, "--json") {
+    println(@robots.policy_comparison_json(comparison).stringify(indent=2))
+    return
+  }
+  println("POLICY REGRESSION")
+  println("Crawler: " + comparison.user_agent)
+  println("URLs: \{comparison.total_urls}")
+  println("Unchanged: \{comparison.unchanged}")
+  println("Newly allowed: \{comparison.newly_allowed}")
+  println("Newly denied: \{comparison.newly_denied}")
+  if comparison.changes.length() == 0 {
+    println("")
+    println("No observable access changes.")
+    return
+  }
+  for change in comparison.changes {
+    let label = match change.kind {
+      NewlyAllowed => "NEWLY ALLOWED"
+      NewlyDenied => "NEWLY DENIED"
+    }
+    println("")
+    println("\{label}\t\{change.url}")
+    println("  before: " + decision_summary(change.before_decision))
+    println("  after:  " + decision_summary(change.after_decision))
+  }
+}
+
+///|
 fn main {
   let args = @env.args()
   try {
@@ -233,6 +344,8 @@ fn main {
       "inspect" => run_inspect(args)
       "lint" => run_lint(args)
       "batch" => run_batch(args)
+      "coverage" => run_coverage(args)
+      "diff" => run_diff(args)
       command => {
         println("error: unknown command '" + command + "'")
         usage()

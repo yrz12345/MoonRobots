@@ -22,6 +22,18 @@ function assert(condition, message) {
   assert((await page.locator("#decision-word").textContent()) === "允许抓取", "default scenario should allow");
   assert((await page.locator(".candidate-status.winner").count()) === 1, "default scenario should expose one winner");
 
+  const analysisApi = await page.evaluate(() => {
+    const before = "User-agent: *\nDisallow: /private/\n";
+    const after = "User-agent: *\nDisallow: /private/\nDisallow: /draft/\n";
+    const urls = "/private/a\n/draft/a\n/open";
+    return {
+      comparison: JSON.parse(globalThis.comparePolicies(before, after, "Bot", urls)),
+      coverage: JSON.parse(globalThis.analyzeCoverage(after, "Bot", urls)),
+    };
+  });
+  assert(analysisApi.comparison.newlyDenied === 1, "browser comparison API should report a new denial");
+  assert(analysisApi.coverage.totalUrls === 3, "browser coverage API should process the URL corpus");
+
   await page.getByRole("button", { name: "风险策略" }).click();
   assert((await page.locator("#decision-word").textContent()) === "拒绝抓取", "risk scenario should deny");
   assert((await page.locator("#issues-count").textContent()) !== "0", "risk scenario should report diagnostics");
@@ -47,7 +59,7 @@ function assert(condition, message) {
     fullPage: true,
   });
   await browser.close();
-  console.log("PASS: 4 interaction states, 0 browser errors, desktop + mobile screenshots written");
+  console.log("PASS: 4 interaction states, 2 analysis APIs, 0 browser errors, desktop + mobile screenshots written");
 })().catch((error) => {
   console.error(`FAIL: ${error.message}`);
   process.exitCode = 1;

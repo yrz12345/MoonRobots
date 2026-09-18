@@ -1,11 +1,17 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "moonrobots/moonrobots"
+package "yrz12345/moonrobots"
 
 import {
   "moonbitlang/core/debug",
 }
 
 // Values
+pub fn analyze_coverage(RobotsFile, String, Array[String]) -> CoverageReport
+
+pub fn compare_policies(RobotsFile, RobotsFile, String, Array[String]) -> PolicyComparison
+
+pub fn coverage_report_json(CoverageReport) -> Json
+
 pub fn decision_json(Decision) -> Json
 
 pub fn diagnostic_json(Diagnostic) -> Json
@@ -22,11 +28,22 @@ pub fn lint(RobotsFile) -> Array[Diagnostic]
 
 pub fn parse(String) -> RobotsFile
 
+pub fn policy_comparison_json(PolicyComparison) -> Json
+
 pub fn version() -> String
 
 // Errors
 
 // Types and methods
+pub(all) struct CoverageReport {
+  user_agent : String
+  selected_agents : Array[String]
+  total_urls : Int
+  allowed : Int
+  denied : Int
+  rules : Array[RuleCoverage]
+} derive(Eq, @debug.Debug)
+
 pub(all) struct Decision {
   allowed : Bool
   user_agent : String
@@ -62,6 +79,27 @@ pub(all) struct Group {
   line : Int
 } derive(Eq, @debug.Debug)
 
+pub(all) struct PolicyChange {
+  url : String
+  kind : PolicyChangeKind
+  before_decision : Decision
+  after_decision : Decision
+} derive(Eq, @debug.Debug)
+
+pub(all) enum PolicyChangeKind {
+  NewlyAllowed
+  NewlyDenied
+} derive(Eq, @debug.Debug)
+
+pub(all) struct PolicyComparison {
+  user_agent : String
+  total_urls : Int
+  unchanged : Int
+  newly_allowed : Int
+  newly_denied : Int
+  changes : Array[PolicyChange]
+} derive(Eq, @debug.Debug)
+
 pub(all) struct RobotsFile {
   groups : Array[Group]
   sitemaps : Array[String]
@@ -72,6 +110,12 @@ pub(all) struct Rule {
   kind : RuleKind
   pattern : String
   line : Int
+} derive(Eq, @debug.Debug)
+
+pub(all) struct RuleCoverage {
+  rule : Rule
+  matched_urls : Int
+  winning_urls : Int
 } derive(Eq, @debug.Debug)
 
 pub(all) struct RuleEvaluation {

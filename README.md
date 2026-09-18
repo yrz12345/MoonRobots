@@ -25,7 +25,9 @@ robots.txt + crawler product token + URL
 - 对 `/robots.txt` 的隐式允许
 - 返回命中规则、源码行号和决策原因，而不只是一个布尔值
 - 提供完整评估轨迹：每条候选规则的标准化结果、匹配状态与特异度
-- `check`、`inspect`、`lint`、`batch` 四个 CLI 命令
+- `check`、`inspect`、`lint`、`batch`、`coverage`、`diff` 六个 CLI 命令
+- 策略回归分析：比较新旧策略并定位新增允许与新增拒绝
+- URL 语料覆盖率：识别活跃、从未匹配和动态遮蔽的规则
 - `--json` 结构化输出，可直接接入 CI、爬虫和 AI Agent
 - 语义 lint：重复规则、空分组、全站禁止、异常 Sitemap 等
 - 核心库在 Native、JavaScript、Wasm 和 Wasm-GC 后端测试
@@ -105,6 +107,26 @@ moon run src/cmd/moonrobots --target native -- batch examples/basic.txt examples
 
 `batch` 同样支持 `--json`，输出中保留原始 URL、决策结果和汇总计数。
 
+分析规则覆盖率：
+
+```powershell
+moon run src/cmd/moonrobots --target native -- coverage examples/policy-after.txt examples/regression-urls.txt --agent MoonBot
+```
+
+报告会为每条选中规则统计 `matched` 和 `won` 次数，并标记：
+
+- `ACTIVE`：至少赢得过一次最终判定
+- `SHADOWED`：能够匹配，但在当前 URL 语料中从未胜出
+- `NEVER MATCHED`：当前语料没有覆盖这条规则
+
+在部署新策略前执行回归比较：
+
+```powershell
+moon run src/cmd/moonrobots --target native -- diff examples/policy-before.txt examples/policy-after.txt examples/regression-urls.txt --agent MoonBot
+```
+
+`diff` 只报告最终访问行为发生改变的 URL，并区分 `NEWLY ALLOWED` 和 `NEWLY DENIED`。加入 `--json` 后可在 CI 中设置策略变更门禁。
+
 ## 作为库使用
 
 ```moonbit
@@ -150,6 +172,13 @@ for candidate in trace.candidates {
 let allowed = @moonrobots.is_allowed(robots, "ExampleBot", "/docs/start")
 ```
 
+策略回归与覆盖率也可作为核心库 API 使用：
+
+```moonbit
+let comparison = @moonrobots.compare_policies(before, after, "MoonBot", urls)
+let coverage = @moonrobots.analyze_coverage(after, "MoonBot", urls)
+```
+
 `user_agent` 参数应当传入爬虫的 product token，例如 `Googlebot` 或 `MoonBot`，而不是完整 HTTP `User-Agent` 请求头。
 
 ## 决策规则
@@ -170,6 +199,7 @@ src/
   parser.mbt      fault-tolerant robots.txt parser
   normalize.mbt   URL extraction and percent normalization
   matcher.mbt     linear-time wildcard matcher and decision engine
+  analysis.mbt    policy regression and dynamic rule coverage
   *_test.mbt      cross-backend tests
 src/cmd/moonrobots/ native CLI
 src/web_api/       browser-facing foreign library
@@ -205,8 +235,8 @@ moon build src/cmd/moonrobots --target native --release
 
 ## 路线图
 
-- v0.1：解析、规则匹配、解释、CLI、浏览器实验台、跨后端测试
-- v0.2：CSV 报告、Sitemap XML 解析和站点级规则覆盖统计
+- v0.1：解析、规则匹配、解释、策略回归、规则覆盖率、CLI、浏览器实验台、跨后端测试
+- v0.2：CSV 报告、Sitemap XML 解析和站点级历史趋势
 - v0.3：HTTP 获取、条件请求和域名缓存
 - v0.4：MCP Server、Agent 访问审计和抓取计划生成
 

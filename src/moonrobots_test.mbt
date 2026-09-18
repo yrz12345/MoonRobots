@@ -277,3 +277,74 @@ test "evaluation trace exposes all selected rule candidates" {
   assert_false(trace.candidates[2].matched)
   inspect(trace.candidates[1].match_length, content="16")
 }
+
+///|
+test "policy comparison reports newly allowed and denied URLs" {
+  let before = parse(
+    (
+      #|User-agent: *
+      #|Disallow: /private/
+      #|
+    ),
+  )
+  let after = parse(
+    (
+      #|User-agent: *
+      #|Disallow: /private/
+      #|Allow: /private/public/
+      #|Disallow: /draft/
+      #|
+    ),
+  )
+  let comparison = compare_policies(before, after, "Bot", [
+    "/private/a", "/private/public/a", "/draft/a", "/open/a",
+  ])
+  inspect(comparison.total_urls, content="4")
+  inspect(comparison.unchanged, content="2")
+  inspect(comparison.newly_allowed, content="1")
+  inspect(comparison.newly_denied, content="1")
+  assert_eq(comparison.changes[0].kind, NewlyAllowed)
+  assert_eq(comparison.changes[1].kind, NewlyDenied)
+}
+
+///|
+test "coverage distinguishes active shadowed and unmatched rules" {
+  let robots = parse(
+    (
+      #|User-agent: *
+      #|Disallow: /private/
+      #|Allow: /private/public/
+      #|Disallow: /never/
+      #|
+    ),
+  )
+  let report = analyze_coverage(robots, "Bot", [
+    "/private/a", "/private/public/a", "/open/a",
+  ])
+  inspect(report.total_urls, content="3")
+  inspect(report.allowed, content="2")
+  inspect(report.denied, content="1")
+  inspect(report.rules.length(), content="3")
+  inspect(report.rules[0].matched_urls, content="2")
+  inspect(report.rules[0].winning_urls, content="1")
+  inspect(report.rules[1].matched_urls, content="1")
+  inspect(report.rules[1].winning_urls, content="1")
+  inspect(report.rules[2].matched_urls, content="0")
+  inspect(report.rules[2].winning_urls, content="0")
+}
+
+///|
+test "comparison and coverage JSON expose stable summary fields" {
+  let before = parse("User-agent: *\nDisallow: /private/\n")
+  let after = parse("User-agent: *\nAllow: /private/\n")
+  let comparison = compare_policies(before, after, "Bot", ["/private/a"])
+  guard policy_comparison_json(comparison) is Object(fields) else {
+    fail("expected comparison JSON object")
+  }
+  assert_eq(fields.get("newlyAllowed"), Some(Json(1)))
+  let coverage = analyze_coverage(after, "Bot", ["/private/a", "/open"])
+  guard coverage_report_json(coverage) is Object(coverage_fields) else {
+    fail("expected coverage JSON object")
+  }
+  assert_eq(coverage_fields.get("totalUrls"), Some(Json(2)))
+}

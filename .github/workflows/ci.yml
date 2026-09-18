@@ -25,3 +25,7 @@ jobs:
         run: moon test --target all
       - name: Build native CLI
         run: moon build src/cmd/moonrobots --target native --release
+      - name: Policy analysis smoke tests
+        run: |
+          moon run src/cmd/moonrobots --target native -- diff examples/policy-before.txt examples/policy-after.txt examples/regression-urls.txt --agent MoonBot --json
+          moon run src/cmd/moonrobots --target native -- coverage examples/policy-after.txt examples/regression-urls.txt --agent MoonBot --json

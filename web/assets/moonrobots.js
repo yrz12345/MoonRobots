@@ -166,6 +166,33 @@
     this.matched = param2;
     this.match_length = param3;
   }
+  function _M0TP28yrz1234510moonrobots12PolicyChange(param0, param1, param2, param3) {
+    this.url = param0;
+    this.kind = param1;
+    this.before_decision = param2;
+    this.after_decision = param3;
+  }
+  function _M0TP28yrz1234510moonrobots16PolicyComparison(param0, param1, param2, param3, param4, param5) {
+    this.user_agent = param0;
+    this.total_urls = param1;
+    this.unchanged = param2;
+    this.newly_allowed = param3;
+    this.newly_denied = param4;
+    this.changes = param5;
+  }
+  function _M0TP28yrz1234510moonrobots12RuleCoverage(param0, param1, param2) {
+    this.rule = param0;
+    this.matched_urls = param1;
+    this.winning_urls = param2;
+  }
+  function _M0TP28yrz1234510moonrobots14CoverageReport(param0, param1, param2, param3, param4, param5) {
+    this.user_agent = param0;
+    this.selected_agents = param1;
+    this.total_urls = param2;
+    this.allowed = param3;
+    this.denied = param4;
+    this.rules = param5;
+  }
   const _M0FP092moonbitlang_2fcore_2fbuiltin_2fStringBuilder_24as_24_40moonbitlang_2fcore_2fbuiltin_2eLogger = { method_0: _M0IPB13StringBuilderPB6Logger13write__string, method_1: _M0IP016_24default__implPB6Logger16write__substringGRPB13StringBuilderE, method_2: _M0IPB13StringBuilderPB6Logger11write__view, method_3: _M0IPB13StringBuilderPB6Logger11write__char, method_4: _M0IP016_24default__implPB6Logger28write__string__interpolationGRPB13StringBuilderE, method_5: _M0IP016_24default__implPB6Logger5writeGRPB13StringBuilderE };
   const _M0MPC16string10StringView4trimN7_2abindS6841 = "\t\n\r ";
   const _M0MPC16string6String4trimN7_2abindS6942 = "\t\n\r ";
@@ -176,21 +203,23 @@
   const _M0MPB4Iter4nextN6constrS9919GcE = 0;
   const _M0MPB4Iter3newN6constrS9926GUsRPB4JsonEE = 0;
   const _M0MPB4Iter3newN6constrS9926GcE = 0;
-  const _M0FP28yrz1234510moonrobots4lintN7_2abindS259 = "https://";
-  const _M0FP28yrz1234510moonrobots4lintN7_2abindS260 = "http://";
-  const _M0FP28yrz1234510moonrobots5parseN7_2abindS302 = "\n";
-  const _M0FP28yrz1234510moonrobots5parseN7_2abindS273 = "\r";
-  const _M0FP28yrz1234510moonrobots5parseN7_2abindS274 = "#";
-  const _M0FP28yrz1234510moonrobots5parseN7_2abindS286 = ":";
-  const _M0FP28yrz1234510moonrobots5parseN7_2abindS280 = "/";
-  const _M0FP28yrz1234510moonrobots5parseN7_2abindS281 = "*";
-  const _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS324 = "#";
-  const _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS318 = "://";
-  const _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS316 = "/";
-  const _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS315 = "?";
-  const _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS317 = "/";
-  const _M0FP28yrz1234510moonrobots14pattern__matchN7_2abindS330 = "$";
-  const _M0FP28yrz1234510moonrobots15evaluate__traceN7_2abindS373 = "/robots.txt?";
+  const _M0FP28yrz1234510moonrobots4lintN7_2abindS346 = "https://";
+  const _M0FP28yrz1234510moonrobots4lintN7_2abindS347 = "http://";
+  const _M0FP28yrz1234510moonrobots5parseN7_2abindS389 = "\n";
+  const _M0FP28yrz1234510moonrobots5parseN7_2abindS360 = "\r";
+  const _M0FP28yrz1234510moonrobots5parseN7_2abindS361 = "#";
+  const _M0FP28yrz1234510moonrobots5parseN7_2abindS373 = ":";
+  const _M0FP28yrz1234510moonrobots5parseN7_2abindS367 = "/";
+  const _M0FP28yrz1234510moonrobots5parseN7_2abindS368 = "*";
+  const _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS411 = "#";
+  const _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS405 = "://";
+  const _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS403 = "/";
+  const _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS402 = "?";
+  const _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS404 = "/";
+  const _M0FP28yrz1234510moonrobots14pattern__matchN7_2abindS417 = "$";
+  const _M0FP28yrz1234510moonrobots15evaluate__traceN7_2abindS460 = "/robots.txt?";
+  const _M0FP38yrz1234510moonrobots8web__api16urls__from__textN7_2abindS35 = "\n";
+  const _M0FP38yrz1234510moonrobots8web__api16urls__from__textN7_2abindS24 = "#";
   const _M0MPC16string10StringView4findN6constrS9928 = 0;
   const _M0FPB4seed = _M0FPB12random__seed();
   const _M0FPC17prelude4null = _M0FPB4null;
@@ -852,6 +881,9 @@
     return _M0MPC16string10StringView11has__prefix(new _M0TPC16string10StringView(self, 0, self.length), str);
   }
   function _M0MPC15array5Array4pushGRP28yrz1234510moonrobots10DiagnosticE(self, value) {
+    _M0MPB7JSArray4push(self, value);
+  }
+  function _M0MPC15array5Array4pushGiE(self, value) {
     _M0MPB7JSArray4push(self, value);
   }
   function _M0MPC15array5Array4pushGcE(self, value) {
@@ -1682,9 +1714,23 @@
     const len = self.length;
     return index >= 0 && index < len ? self[index] : $panic();
   }
+  function _M0MPC15array5Array2atGiE(self, index) {
+    const len = self.length;
+    return index >= 0 && index < len ? self[index] : $panic();
+  }
   function _M0MPC15array5Array2atGcE(self, index) {
     const len = self.length;
     return index >= 0 && index < len ? self[index] : $panic();
+  }
+  function _M0MPC15array5Array3setGiE(self, index, value) {
+    const len = self.length;
+    if (index >= 0 && index < len) {
+      self[index] = value;
+      return;
+    } else {
+      $panic();
+      return;
+    }
   }
   function _M0MPC15array5Array8containsGsE(self, value) {
     const _bind = self.length;
@@ -1998,15 +2044,18 @@
     }
     return buf.val;
   }
-  function _M0IP28yrz1234510moonrobots8RuleKindPB2Eq5equal(_x_169, _x_170) {
-    if (_x_169 === 0) {
-      if (_x_170 === 0) {
+  function _M0IP28yrz1234510moonrobots4RulePB2Eq5equal(_x_233, _x_234) {
+    return _M0IP28yrz1234510moonrobots8RuleKindPB2Eq5equal(_x_233.kind, _x_234.kind) && _x_233.pattern === _x_234.pattern && _x_233.line === _x_234.line;
+  }
+  function _M0IP28yrz1234510moonrobots8RuleKindPB2Eq5equal(_x_221, _x_222) {
+    if (_x_221 === 0) {
+      if (_x_222 === 0) {
         return true;
       } else {
         return false;
       }
     } else {
-      if (_x_170 === 1) {
+      if (_x_222 === 1) {
         return true;
       } else {
         return false;
@@ -2073,6 +2122,60 @@
     const candidates = _p$2;
     const _bind = [{ _0: "decision", _1: _M0FP28yrz1234510moonrobots14decision__json(trace.decision) }, { _0: "candidates", _1: _M0MPC14json4Json4JsonGRPB5ArrayGRPB4JsonEE(candidates) }];
     const _p$4 = _M0MPB3Map3MapGsRPB4JsonE(new _M0TPB9ArrayViewGUsRPB4JsonEE(_bind, 0, 2), undefined);
+    return new _M0DTPB4Json6Object(_p$4);
+  }
+  function _M0FP28yrz1234510moonrobots24policy__comparison__json(comparison) {
+    const _p = comparison.changes;
+    const _p$2 = new Array(_p.length);
+    const _p$3 = _p.length;
+    let _tmp = 0;
+    while (true) {
+      const _p$4 = _tmp;
+      if (_p$4 < _p$3) {
+        const _p$5 = _p[_p$4];
+        const _p$6 = _p$5.kind;
+        let _p$7;
+        if (_p$6 === 0) {
+          _p$7 = "newly_allowed";
+        } else {
+          _p$7 = "newly_denied";
+        }
+        const _p$8 = [{ _0: "url", _1: _M0MPC14json4Json4JsonGsE(_p$5.url) }, { _0: "kind", _1: _M0MPC14json4Json4JsonGsE(_p$7) }, { _0: "before", _1: _M0FP28yrz1234510moonrobots14decision__json(_p$5.before_decision) }, { _0: "after", _1: _M0FP28yrz1234510moonrobots14decision__json(_p$5.after_decision) }];
+        const _p$9 = _M0MPB3Map3MapGsRPB4JsonE(new _M0TPB9ArrayViewGUsRPB4JsonEE(_p$8, 0, 4), undefined);
+        _p$2[_p$4] = new _M0DTPB4Json6Object(_p$9);
+        _tmp = _p$4 + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const changes = _p$2;
+    const _bind = [{ _0: "userAgent", _1: _M0MPC14json4Json4JsonGsE(comparison.user_agent) }, { _0: "totalUrls", _1: _M0MPC14json4Json4JsonGiE(comparison.total_urls) }, { _0: "unchanged", _1: _M0MPC14json4Json4JsonGiE(comparison.unchanged) }, { _0: "newlyAllowed", _1: _M0MPC14json4Json4JsonGiE(comparison.newly_allowed) }, { _0: "newlyDenied", _1: _M0MPC14json4Json4JsonGiE(comparison.newly_denied) }, { _0: "changes", _1: _M0MPC14json4Json4JsonGRPB5ArrayGRPB4JsonEE(changes) }];
+    const _p$4 = _M0MPB3Map3MapGsRPB4JsonE(new _M0TPB9ArrayViewGUsRPB4JsonEE(_bind, 0, 6), undefined);
+    return new _M0DTPB4Json6Object(_p$4);
+  }
+  function _M0FP28yrz1234510moonrobots22coverage__report__json(report) {
+    const _p = report.rules;
+    const _p$2 = new Array(_p.length);
+    const _p$3 = _p.length;
+    let _tmp = 0;
+    while (true) {
+      const _p$4 = _tmp;
+      if (_p$4 < _p$3) {
+        const _p$5 = _p[_p$4];
+        const _p$6 = _p$5.matched_urls === 0 ? "never_matched" : _p$5.winning_urls === 0 ? "shadowed" : "active";
+        const _p$7 = [{ _0: "kind", _1: _M0MPC14json4Json4JsonGsE(_M0FP28yrz1234510moonrobots16rule__kind__name(_p$5.rule.kind)) }, { _0: "pattern", _1: _M0MPC14json4Json4JsonGsE(_p$5.rule.pattern) }, { _0: "line", _1: _M0MPC14json4Json4JsonGiE(_p$5.rule.line) }, { _0: "matchedUrls", _1: _M0MPC14json4Json4JsonGiE(_p$5.matched_urls) }, { _0: "winningUrls", _1: _M0MPC14json4Json4JsonGiE(_p$5.winning_urls) }, { _0: "status", _1: _M0MPC14json4Json4JsonGsE(_p$6) }];
+        const _p$8 = _M0MPB3Map3MapGsRPB4JsonE(new _M0TPB9ArrayViewGUsRPB4JsonEE(_p$7, 0, 6), undefined);
+        _p$2[_p$4] = new _M0DTPB4Json6Object(_p$8);
+        _tmp = _p$4 + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const rules = _p$2;
+    const _bind = [{ _0: "userAgent", _1: _M0MPC14json4Json4JsonGsE(report.user_agent) }, { _0: "selectedAgents", _1: _M0MPC14json4Json4JsonGRPB5ArrayGsEE(report.selected_agents) }, { _0: "totalUrls", _1: _M0MPC14json4Json4JsonGiE(report.total_urls) }, { _0: "allowed", _1: _M0MPC14json4Json4JsonGiE(report.allowed) }, { _0: "denied", _1: _M0MPC14json4Json4JsonGiE(report.denied) }, { _0: "rules", _1: _M0MPC14json4Json4JsonGRPB5ArrayGRPB4JsonEE(rules) }];
+    const _p$4 = _M0MPB3Map3MapGsRPB4JsonE(new _M0TPB9ArrayViewGUsRPB4JsonEE(_bind, 0, 6), undefined);
     return new _M0DTPB4Json6Object(_p$4);
   }
   function _M0FP28yrz1234510moonrobots16diagnostic__json(item) {
@@ -2158,7 +2261,7 @@
       const _ = _tmp$2;
       if (_ < _bind$4) {
         const sitemap = _bind$3[_];
-        if (!_M0MPC16string6String11has__prefix(sitemap, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots4lintN7_2abindS259, 0, _M0FP28yrz1234510moonrobots4lintN7_2abindS259.length)) && !_M0MPC16string6String11has__prefix(sitemap, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots4lintN7_2abindS260, 0, _M0FP28yrz1234510moonrobots4lintN7_2abindS260.length))) {
+        if (!_M0MPC16string6String11has__prefix(sitemap, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots4lintN7_2abindS346, 0, _M0FP28yrz1234510moonrobots4lintN7_2abindS346.length)) && !_M0MPC16string6String11has__prefix(sitemap, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots4lintN7_2abindS347, 0, _M0FP28yrz1234510moonrobots4lintN7_2abindS347.length))) {
           _M0MPC15array5Array4pushGRP28yrz1234510moonrobots10DiagnosticE(output, _M0FP28yrz1234510moonrobots10lint__item(1, "L004", 0, `Sitemap should use an absolute HTTP or HTTPS URL: ${sitemap}`));
         }
         if (_M0MPC15array5Array8containsGsE(seen_sitemaps, sitemap)) {
@@ -2244,7 +2347,7 @@
     let group_line = 0;
     let group_has_rule = false;
     let line_number = 0;
-    const _it = _M0MPC16string6String5split(source, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS302, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS302.length));
+    const _it = _M0MPC16string6String5split(source, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS389, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS389.length));
     _L: while (true) {
       const _bind = _M0MPB4Iter4nextGRPC16string10StringViewE(_it);
       if (_bind === undefined) {
@@ -2254,10 +2357,10 @@
         const _raw_line = _Some;
         line_number = line_number + 1 | 0;
         let line = _M0MPC16string10StringView9to__owned(_raw_line);
-        if (_M0MPC16string6String11has__suffix(line, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS273, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS273.length))) {
+        if (_M0MPC16string6String11has__suffix(line, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS360, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS360.length))) {
           line = _M0MPC16string10StringView9to__owned(_M0MPC16string6String21clamped__view_2einner(line, 0, line.length - 1 | 0));
         }
-        const _bind$2 = _M0MPC16string6String4find(line, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS274, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS274.length));
+        const _bind$2 = _M0MPC16string6String4find(line, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS361, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS361.length));
         if (_bind$2 === undefined) {
         } else {
           const _Some$2 = _bind$2;
@@ -2268,7 +2371,7 @@
         if (trimmed === "") {
           continue;
         }
-        const _bind$3 = _M0MPC16string6String4find(trimmed, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS286, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS286.length));
+        const _bind$3 = _M0MPC16string6String4find(trimmed, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS373, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS373.length));
         if (_bind$3 === undefined) {
           _M0MPC15array5Array4pushGRP28yrz1234510moonrobots10DiagnosticE(diagnostics, _M0FP28yrz1234510moonrobots10diagnostic(1, "R001", line_number, "record has no ':' separator and was ignored"));
           continue;
@@ -2327,7 +2430,7 @@
             let _tmp;
             const _p = "";
             if (!(value === _p)) {
-              _tmp = !_M0MPC16string6String11has__prefix(value, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS280, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS280.length)) && !_M0MPC16string6String11has__prefix(value, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS281, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS281.length));
+              _tmp = !_M0MPC16string6String11has__prefix(value, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS367, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS367.length)) && !_M0MPC16string6String11has__prefix(value, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots5parseN7_2abindS368, 0, _M0FP28yrz1234510moonrobots5parseN7_2abindS368.length));
             } else {
               _tmp = false;
             }
@@ -2439,7 +2542,7 @@
     return out.val;
   }
   function _M0FP28yrz1234510moonrobots15path__from__url(url) {
-    const _bind = _M0MPC16string6String4find(url, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS324, 0, _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS324.length));
+    const _bind = _M0MPC16string6String4find(url, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS411, 0, _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS411.length));
     let without_fragment;
     if (_bind === undefined) {
       without_fragment = url;
@@ -2448,16 +2551,16 @@
       const _index = _Some;
       without_fragment = _M0MPC16string10StringView9to__owned(_M0MPC16string6String21clamped__view_2einner(url, 0, _index));
     }
-    const _bind$2 = _M0MPC16string6String4find(without_fragment, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS318, 0, _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS318.length));
+    const _bind$2 = _M0MPC16string6String4find(without_fragment, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS405, 0, _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS405.length));
     if (_bind$2 === undefined) {
-      return _M0MPC16string6String11has__prefix(without_fragment, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS317, 0, _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS317.length)) ? without_fragment : `/${without_fragment}`;
+      return _M0MPC16string6String11has__prefix(without_fragment, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS404, 0, _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS404.length)) ? without_fragment : `/${without_fragment}`;
     } else {
       const _Some = _bind$2;
       const _scheme_end = _Some;
       const authority_start = _scheme_end + 3 | 0;
       const rest = _M0MPC16string10StringView9to__owned(_M0MPC16string6String21clamped__view_2einner(without_fragment, authority_start, undefined));
-      const slash = _M0MPC16string6String4find(rest, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS316, 0, _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS316.length));
-      const query = _M0MPC16string6String4find(rest, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS315, 0, _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS315.length));
+      const slash = _M0MPC16string6String4find(rest, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS403, 0, _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS403.length));
+      const query = _M0MPC16string6String4find(rest, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS402, 0, _M0FP28yrz1234510moonrobots15path__from__urlN7_2abindS402.length));
       if (slash === undefined) {
         if (query === undefined) {
           return "/";
@@ -2482,7 +2585,7 @@
   function _M0FP28yrz1234510moonrobots14pattern__match(pattern, target) {
     let exact_end = false;
     let body = pattern;
-    if (_M0MPC16string6String11has__suffix(body, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots14pattern__matchN7_2abindS330, 0, _M0FP28yrz1234510moonrobots14pattern__matchN7_2abindS330.length))) {
+    if (_M0MPC16string6String11has__suffix(body, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots14pattern__matchN7_2abindS417, 0, _M0FP28yrz1234510moonrobots14pattern__matchN7_2abindS417.length))) {
       exact_end = true;
       body = _M0MPC16string10StringView9to__owned(_M0MPC16string6String21clamped__view_2einner(body, 0, body.length - 1 | 0));
     }
@@ -2706,7 +2809,7 @@
   function _M0FP28yrz1234510moonrobots15evaluate__trace(robots, user_agent, url) {
     const raw_path = _M0FP28yrz1234510moonrobots15path__from__url(url);
     const path = _M0FP28yrz1234510moonrobots15normalize__path(raw_path, false);
-    if (raw_path === "/robots.txt" || _M0MPC16string6String11has__prefix(raw_path, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15evaluate__traceN7_2abindS373, 0, _M0FP28yrz1234510moonrobots15evaluate__traceN7_2abindS373.length))) {
+    if (raw_path === "/robots.txt" || _M0MPC16string6String11has__prefix(raw_path, new _M0TPC16string10StringView(_M0FP28yrz1234510moonrobots15evaluate__traceN7_2abindS460, 0, _M0FP28yrz1234510moonrobots15evaluate__traceN7_2abindS460.length))) {
       return new _M0TP28yrz1234510moonrobots15EvaluationTrace(new _M0TP28yrz1234510moonrobots8Decision(true, user_agent, path, [], undefined, 0, 0), []);
     }
     const _bind = _M0FP28yrz1234510moonrobots15selected__rules(robots, user_agent);
@@ -2751,6 +2854,118 @@
       decision = new _M0TP28yrz1234510moonrobots8Decision(_M0IP28yrz1234510moonrobots8RuleKindPB2Eq5equal(_rule.kind, 0), user_agent, path, _selected_agents, _rule, winner_length, 3);
     }
     return new _M0TP28yrz1234510moonrobots15EvaluationTrace(decision, candidates);
+  }
+  function _M0FP28yrz1234510moonrobots17compare__policies(before, after, user_agent, urls) {
+    const changes = [];
+    let unchanged = 0;
+    let newly_allowed = 0;
+    let newly_denied = 0;
+    const _bind = urls.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind) {
+        const url = urls[_];
+        const before_decision = _M0FP28yrz1234510moonrobots15evaluate__trace(before, user_agent, url).decision;
+        const after_decision = _M0FP28yrz1234510moonrobots15evaluate__trace(after, user_agent, url).decision;
+        if (before_decision.allowed === after_decision.allowed) {
+          unchanged = unchanged + 1 | 0;
+        } else {
+          if (after_decision.allowed) {
+            newly_allowed = newly_allowed + 1 | 0;
+            _M0MPC15array5Array4pushGRP28yrz1234510moonrobots10DiagnosticE(changes, new _M0TP28yrz1234510moonrobots12PolicyChange(url, 0, before_decision, after_decision));
+          } else {
+            newly_denied = newly_denied + 1 | 0;
+            _M0MPC15array5Array4pushGRP28yrz1234510moonrobots10DiagnosticE(changes, new _M0TP28yrz1234510moonrobots12PolicyChange(url, 1, before_decision, after_decision));
+          }
+        }
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return new _M0TP28yrz1234510moonrobots16PolicyComparison(user_agent, urls.length, unchanged, newly_allowed, newly_denied, changes);
+  }
+  function _M0FP28yrz1234510moonrobots17analyze__coverage(robots, user_agent, urls) {
+    const _bind = _M0FP28yrz1234510moonrobots15selected__rules(robots, user_agent);
+    const _selected = _bind._0;
+    const _selected_agents = _bind._1;
+    const matched_counts = [];
+    const winning_counts = [];
+    const _bind$2 = _selected.length;
+    let _tmp = 0;
+    while (true) {
+      const _ = _tmp;
+      if (_ < _bind$2) {
+        _M0MPC15array5Array4pushGiE(matched_counts, 0);
+        _M0MPC15array5Array4pushGiE(winning_counts, 0);
+        _tmp = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    let allowed = 0;
+    let denied = 0;
+    const _bind$3 = urls.length;
+    let _tmp$2 = 0;
+    while (true) {
+      const _ = _tmp$2;
+      if (_ < _bind$3) {
+        const url = urls[_];
+        const trace = _M0FP28yrz1234510moonrobots15evaluate__trace(robots, user_agent, url);
+        if (trace.decision.allowed) {
+          allowed = allowed + 1 | 0;
+        } else {
+          denied = denied + 1 | 0;
+        }
+        const _bind$4 = trace.candidates;
+        const _bind$5 = _bind$4.length;
+        let _tmp$3 = 0;
+        while (true) {
+          const index = _tmp$3;
+          if (index < _bind$5) {
+            const candidate = _bind$4[index];
+            if (candidate.matched) {
+              _M0MPC15array5Array3setGiE(matched_counts, index, _M0MPC15array5Array2atGiE(matched_counts, index) + 1 | 0);
+            }
+            const _bind$6 = trace.decision.matched_rule;
+            if (_bind$6 === undefined) {
+            } else {
+              const _Some = _bind$6;
+              const _winner = _Some;
+              if (_M0IP28yrz1234510moonrobots4RulePB2Eq5equal(candidate.rule, _winner)) {
+                _M0MPC15array5Array3setGiE(winning_counts, index, _M0MPC15array5Array2atGiE(winning_counts, index) + 1 | 0);
+              }
+            }
+            _tmp$3 = index + 1 | 0;
+            continue;
+          } else {
+            break;
+          }
+        }
+        _tmp$2 = _ + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const rules = [];
+    const _bind$4 = _selected.length;
+    let _tmp$3 = 0;
+    while (true) {
+      const index = _tmp$3;
+      if (index < _bind$4) {
+        const rule = _selected[index];
+        _M0MPC15array5Array4pushGRP28yrz1234510moonrobots10DiagnosticE(rules, new _M0TP28yrz1234510moonrobots12RuleCoverage(rule, _M0MPC15array5Array2atGiE(matched_counts, index), _M0MPC15array5Array2atGiE(winning_counts, index)));
+        _tmp$3 = index + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    return new _M0TP28yrz1234510moonrobots14CoverageReport(user_agent, _selected_agents, urls.length, allowed, denied, rules);
   }
   function _M0FP38yrz1234510moonrobots8web__api7analyze(source, user_agent, url) {
     const file = _M0FP28yrz1234510moonrobots5parse(source);
@@ -2797,5 +3012,39 @@
     const result = new _M0DTPB4Json6Object(_p$7);
     return _M0MPC14json4Json17stringify_2einner(result, false, 0, undefined);
   }
+  function _M0FP38yrz1234510moonrobots8web__api16urls__from__text(source) {
+    const urls = [];
+    const _it = _M0MPC16string6String5split(source, new _M0TPC16string10StringView(_M0FP38yrz1234510moonrobots8web__api16urls__from__textN7_2abindS35, 0, _M0FP38yrz1234510moonrobots8web__api16urls__from__textN7_2abindS35.length));
+    while (true) {
+      const _bind = _M0MPB4Iter4nextGRPC16string10StringViewE(_it);
+      if (_bind === undefined) {
+        break;
+      } else {
+        const _Some = _bind;
+        const _raw = _Some;
+        const url = _M0MPC16string10StringView9to__owned(_M0MPC16string10StringView4trim(_raw, undefined));
+        let _tmp;
+        const _p = "";
+        if (!(url === _p)) {
+          _tmp = !_M0MPC16string6String11has__prefix(url, new _M0TPC16string10StringView(_M0FP38yrz1234510moonrobots8web__api16urls__from__textN7_2abindS24, 0, _M0FP38yrz1234510moonrobots8web__api16urls__from__textN7_2abindS24.length));
+        } else {
+          _tmp = false;
+        }
+        if (_tmp) {
+          _M0MPC15array5Array4pushGRP28yrz1234510moonrobots10DiagnosticE(urls, url);
+        }
+        continue;
+      }
+    }
+    return urls;
+  }
+  function _M0FP38yrz1234510moonrobots8web__api17compare__policies(before, after, user_agent, urls) {
+    return _M0MPC14json4Json17stringify_2einner(_M0FP28yrz1234510moonrobots24policy__comparison__json(_M0FP28yrz1234510moonrobots17compare__policies(_M0FP28yrz1234510moonrobots5parse(before), _M0FP28yrz1234510moonrobots5parse(after), user_agent, _M0FP38yrz1234510moonrobots8web__api16urls__from__text(urls))), false, 0, undefined);
+  }
+  function _M0FP38yrz1234510moonrobots8web__api17analyze__coverage(source, user_agent, urls) {
+    return _M0MPC14json4Json17stringify_2einner(_M0FP28yrz1234510moonrobots22coverage__report__json(_M0FP28yrz1234510moonrobots17analyze__coverage(_M0FP28yrz1234510moonrobots5parse(source), user_agent, _M0FP38yrz1234510moonrobots8web__api16urls__from__text(urls))), false, 0, undefined);
+  }
   globalThis.analyze = _M0FP38yrz1234510moonrobots8web__api7analyze;
+  globalThis.comparePolicies = _M0FP38yrz1234510moonrobots8web__api17compare__policies;
+  globalThis.analyzeCoverage = _M0FP38yrz1234510moonrobots8web__api17analyze__coverage;
 })();
